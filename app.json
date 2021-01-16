@@ -1,0 +1,23 @@
+{
+  "name": "PLeagueBot",
+  "description": "P+ League Chatbot",
+  "repository": "https://github.com/louis70109/PLeagueBot",
+  "keywords": [
+    "LINE",
+    "flask",
+    "python",
+    "static"
+  ],
+  "addons": ["heroku-postgresql:hobby-dev", "papertrail"],
+  "env": {
+    "PY_ENV": "production"
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-python.git"
+    },
+    {
+      "url": "heroku/python"
+    }
+  ]
+}
