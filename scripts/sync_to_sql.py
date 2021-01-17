@@ -1,5 +1,4 @@
 import json
-import sched
 
 import requests
 from bs4 import BeautifulSoup
@@ -9,6 +8,9 @@ import psycopg2.extras
 import urllib.parse as urlparse
 import os
 from lotify.client import Client
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+sched = BlockingScheduler()
 
 URL = urlparse.urlparse(os.getenv('DATABASE_URL'))
 DB_NAME = URL.path[1:]
