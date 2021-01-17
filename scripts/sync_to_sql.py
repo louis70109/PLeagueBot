@@ -1,4 +1,6 @@
 import json
+import sched
+
 import requests
 from bs4 import BeautifulSoup
 import psycopg2
@@ -42,6 +44,7 @@ class Database:
 
 
 print('Check tables status...')
+
 
 def db_table_check():
     try:
@@ -206,7 +209,8 @@ def insert_or_update_to_game(games: list):
         conn.commit()
 
 
-if __name__ == '__main__':
+@sched.scheduled_job('cron', minute='*/2')
+def main():
     print('Check tables status...')
     db_table_check()
     print('Youtube stream loading...')

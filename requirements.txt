@@ -8,3 +8,4 @@ gunicorn
 psycopg2-binary
 beautifulsoup4
 requests
+APScheduler==3.6.1
