@@ -113,7 +113,7 @@ def game_flex_template(guest_image, main_image, score, people, location, date):
             "layout": "vertical",
             "contents": [{
                 "type": "text",
-                "text": f"🏀 {location} 🏀",
+                "text": f"{location}",
                 "weight": "bold",
                 "size": "xl",
                 "gravity": "center",
