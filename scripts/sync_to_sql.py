@@ -52,6 +52,7 @@ def db_table_check():
             cur.execute(f'''
                 CREATE TABLE public.game
                 (
+                    id serial NOT NULL PRIMARY KEY,
                     customer character varying(50) COLLATE pg_catalog."default",
                     customer_image character varying(200) COLLATE pg_catalog."default",
                     main character varying(50) COLLATE pg_catalog."default",
@@ -60,8 +61,6 @@ def db_table_check():
                     people character varying(15) COLLATE pg_catalog."default",
                     place character varying(20) COLLATE pg_catalog."default",
                     event_date character varying(30) COLLATE pg_catalog."default",
-                    id integer NOT NULL DEFAULT nextval('game_id_seq'::regclass),
-                    CONSTRAINT game_pkey PRIMARY KEY (id),
                     CONSTRAINT game_unique UNIQUE (customer, main, place, event_date)
                         INCLUDE(customer, main, place, event_date)
                 );
@@ -70,6 +69,7 @@ def db_table_check():
                     link character varying(255) COLLATE pg_catalog."default",
                     image character varying(255) COLLATE pg_catalog."default",
                     title character varying(100) COLLATE pg_catalog."default",
+                    is_live boolean DEFAULT false,
                     CONSTRAINT stream_unique UNIQUE (link, image, title)
                         INCLUDE(link, image, title)
                 )
