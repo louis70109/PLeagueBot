@@ -172,3 +172,44 @@ def next_games_flex():
         "type": "carousel",
         "contents": content
     }
+
+
+def help_flex():
+    return {
+        "type": "carousel",
+        "contents": [
+            {
+                "type": "bubble",
+                "body": {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "message",
+                                "label": "排定直播",
+                                "text": "排定直播"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "message",
+                                "label": "歷史例行賽賽程",
+                                "text": "歷史例行賽賽程"
+                            }
+                        },
+                        {
+                            "type": "button",
+                            "action": {
+                                "type": "message",
+                                "label": "例行賽剩餘賽程",
+                                "text": "例行賽剩餘賽程"
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }

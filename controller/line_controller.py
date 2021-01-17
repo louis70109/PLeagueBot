@@ -9,7 +9,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import FlexSendMessage, MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction
 
-from utils.flex import stream_flex, last_games_flex, next_games_flex
+from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex
 
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
@@ -35,44 +35,32 @@ class LineController(Resource):
     @handler.add(MessageEvent, message=TextMessage)
     def handle_message(event):
         text = event.message.text
-        user_id = event.source.user_id
+        alt = '觀看更多'
         quick_reply = QuickReply(
             items=[
-                QuickReplyButton(action=MessageAction(label="直播", text="直播")),
+                QuickReplyButton(action=MessageAction(label="排定直播", text="排定直播")),
                 QuickReplyButton(action=MessageAction(label="歷史例行賽賽程", text="歷史例行賽賽程")),
                 QuickReplyButton(action=MessageAction(label="例行賽剩餘賽程", text="例行賽剩餘賽程"))
             ])
-        if text == '直播':
+        if text == '排定直播':
             flex = stream_flex()
-            flex_message = FlexSendMessage(
-                alt_text='Youtube 直播',
-                contents=flex,
-                quick_reply=quick_reply
-            )
-            line_bot_api.reply_message(
-                event.reply_token,
-                messages=flex_message
-            )
+            alt = 'Youtube 直播'
         elif text == '歷史例行賽賽程':
             flex = last_games_flex()
-            flex_message = FlexSendMessage(
-                alt_text='歷史例行賽賽程',
-                contents=flex,
-                quick_reply=quick_reply
-            )
-            line_bot_api.reply_message(
-                event.reply_token,
-                messages=flex_message
-            )
+            alt = '歷史例行賽賽程'
         elif text == '例行賽剩餘賽程':
             flex = next_games_flex()
-            flex_message = FlexSendMessage(
-                alt_text='例行賽剩餘賽程',
-                contents=flex,
-                quick_reply=quick_reply
-            )
-            line_bot_api.reply_message(
-                event.reply_token,
-                messages=flex_message
-            )
+            alt = '例行賽剩餘賽程'
+        else:
+            flex = help_flex()
+
+        flex_message = FlexSendMessage(
+            alt_text=alt,
+            contents=flex,
+            quick_reply=quick_reply
+        )
+        line_bot_api.reply_message(
+            event.reply_token,
+            messages=flex_message
+        )
         return 'OK'
