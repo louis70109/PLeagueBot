@@ -136,7 +136,6 @@ def all_game():
             'User-Agent': 'Popular browser\'s user-agent',
         })
     soup = BeautifulSoup(schedule.content, 'html.parser')
-    print(soup.prettify())
     date, week, time, teams, images, scores, places, people = [], [], [], [], [], [], [], []
     for dt in soup.find_all(class_='fs16 mt-2 mb-1'):
         date.append(dt.get_text())
