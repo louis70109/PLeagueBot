@@ -1,6 +1,6 @@
 import os
 
-from utils.db import find_streams, find_last_games
+from utils.db import find_streams, find_last_games, find_next_games
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 
@@ -157,7 +157,7 @@ def last_games_flex():
 
 
 def next_games_flex():
-    rows = find_last_games()
+    rows = find_next_games()
     content = []
     for row in rows:
         content.append(
