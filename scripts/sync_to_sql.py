@@ -207,7 +207,7 @@ def insert_or_update_to_game(games: list):
         conn.commit()
 
 
-@sched.scheduled_job('cron', minute='*/2')
+@sched.scheduled_job('cron', hour='*/6')
 def main():
     print('Check tables status...')
     db_table_check()
@@ -220,7 +220,11 @@ def main():
     event_date, teams, scores, places, people, images = all_game()
     print('Sync game data to database...')
     games: list = arrange_lists_to_one(event_date, teams, scores, places, people, images)
+    print('Game arrange done.')
+    print(games)
+    print('Ready to insert games.')
     insert_or_update_to_game(games)
+    print('Insert games done.')
 
 
 main()
