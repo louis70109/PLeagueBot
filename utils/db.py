@@ -48,8 +48,8 @@ def find_next_games():
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("SELECT * FROM game WHERE score = '0：0' ORDER BY id ASC LIMIT 12")
-        row = cur.fetchone()
-    return row
+        rows = cur.fetchall()
+    return rows
 
 
 def find_last_games():
