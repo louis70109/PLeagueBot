@@ -79,9 +79,7 @@ def db_table_check():
     
                 ALTER TABLE public.game
                     OWNER to {USER};
-                ALTER TABLE public."user"
-                    OWNER to {USER};
-                ALTER TABLE public.user_site
+                ALTER TABLE public."stream"
                     OWNER to {USER};
             ''')
             conn.commit()
