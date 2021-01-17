@@ -1,4 +1,5 @@
 import json
+import time
 
 import requests
 from bs4 import BeautifulSoup
@@ -132,7 +133,6 @@ def insert_or_update_to_stream(streams):
 def all_game():
     schedule = requests.get('https://pleagueofficial.com/schedule-regular-season')
     soup = BeautifulSoup(schedule.content, 'html.parser')
-    # print(soup.prettify())
     date, week, time, teams, images, scores, places, people = [], [], [], [], [], [], [], []
     for dt in soup.find_all(class_='fs16 mt-2 mb-1'):
         date.append(dt.get_text())
@@ -211,17 +211,22 @@ def insert_or_update_to_game(games: list):
 def main():
     print('Check tables status...')
     db_table_check()
+    time.sleep(1)
     print('Youtube stream loading...')
     streams = stream_parser()
     print('Stream gotcha!')
+    time.sleep(1)
     print('Sync stream data to database.')
     insert_or_update_to_stream(streams)
     print('Sync games...')
+    time.sleep(2)
     event_date, teams, scores, places, people, images = all_game()
+    print(event_date, teams, scores, places, people, images)
     print('Sync game data to database...')
     games: list = arrange_lists_to_one(event_date, teams, scores, places, people, images)
     print('Game arrange done.')
     print(games)
+    time.sleep(2)
     print('Ready to insert games.')
     insert_or_update_to_game(games)
     print('Insert games done.')
