@@ -58,3 +58,19 @@ def find_last_games():
         cur.execute("SELECT * FROM game WHERE score != '0：0' ORDER BY id DESC LIMIT 12")
         rows = cur.fetchall()
     return rows
+
+
+def find_game(id):
+    with Database() as db, db.connect() as conn, conn.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(f"SELECT * FROM game WHERE id = {id}")
+        row = cur.fetchone()
+    return row
+
+
+def find_stream(id):
+    with Database() as db, db.connect() as conn, conn.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(f"SELECT * FROM stream WHERE id = {id}")
+        row = cur.fetchone()
+    return row
