@@ -9,9 +9,6 @@ import psycopg2.extras
 import urllib.parse as urlparse
 import os
 from lotify.client import Client
-from apscheduler.schedulers.blocking import BlockingScheduler
-
-sched = BlockingScheduler()
 
 URL = urlparse.urlparse(os.getenv('DATABASE_URL'))
 DB_NAME = URL.path[1:]
@@ -67,6 +64,7 @@ def db_table_check():
                 );
                 CREATE TABLE public.stream
                 (
+                    id serial NOT NULL PRIMARY KEY,
                     link character varying(255) COLLATE pg_catalog."default",
                     image character varying(255) COLLATE pg_catalog."default",
                     title character varying(100) COLLATE pg_catalog."default",
@@ -133,7 +131,7 @@ def insert_or_update_to_stream(streams):
 def all_game():
     schedule = requests.get(
         'https://pleagueofficial.com/schedule-regular-season', headers={
-            'User-Agent': 'Popular browser\'s user-agent',
+            'User-Agent': 'Google browser\'s user-agent',
         })
     soup = BeautifulSoup(schedule.content, 'html.parser')
     date, week, time, teams, images, scores, places, people = [], [], [], [], [], [], [], []
@@ -167,7 +165,6 @@ def arrange_lists_to_one(event, teams, scores, places, people, images) -> list:
     games = []
     length = len(event)
     index, index2 = 0, 0
-
     while index < length:
         games.append({
             'event_date': event[index],
@@ -209,7 +206,6 @@ def insert_or_update_to_game(games: list):
         conn.commit()
 
 
-@sched.scheduled_job('cron', hour='*/6')
 def main():
     print('Check tables status...')
     db_table_check()
@@ -221,7 +217,6 @@ def main():
     print('Sync stream data to database.')
     insert_or_update_to_stream(streams)
     print('Sync games...')
-    time.sleep(2)
     event_date, teams, scores, places, people, images = all_game()
     print('Sync game data to database...')
     games: list = arrange_lists_to_one(event_date, teams, scores, places, people, images)
