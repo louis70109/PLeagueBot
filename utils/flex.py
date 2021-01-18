@@ -44,7 +44,7 @@ def stream_flex_template(id, title, image, link):
                     "height": "sm",
                     "action": {
                         "type": "uri",
-                        "label": "直播連結",
+                        "label": "影片連結",
                         "uri": link
                     }
                 }, {
