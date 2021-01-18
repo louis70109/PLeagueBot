@@ -39,6 +39,8 @@ DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/postgres
 
 ## Local testing
 
+Run `Scripts/sync_to_sql.py` first, sync official website data to database as crawler.
+
 1. first terminal window
 
 ```
@@ -67,6 +69,9 @@ npx ngrok http 5000
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+- Enable `clock` button to schedule corn.
+
+![](https://i.imgur.com/iA0dvI9.png)
 
 - Add `Heroku Postgres` and it would create `DATABASE_URL` environment variable automatically.
 
