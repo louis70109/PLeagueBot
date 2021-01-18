@@ -3,9 +3,10 @@ import os
 from utils.db import find_streams, find_last_games, find_next_games
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
+SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
 
 
-def stream_flex_template(title, image, link):
+def stream_flex_template(id, title, image, link):
     return {
         "type": "bubble",
         "hero": {
@@ -34,7 +35,7 @@ def stream_flex_template(title, image, link):
         },
         "footer": {
             "type": "box",
-            "layout": "vertical",
+            "layout": "horizontal",
             "spacing": "sm",
             "contents": [
                 {
@@ -45,6 +46,15 @@ def stream_flex_template(title, image, link):
                         "type": "uri",
                         "label": "直播連結",
                         "uri": link
+                    }
+                }, {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "uri",
+                        "label": "分享",
+                        "uri": f"{SHARE_LINK}/?stream={id}"
                     }
                 }
             ],
@@ -57,14 +67,14 @@ def stream_flex():
     rows = find_streams()
     content = []
     for row in rows:
-        content.append(stream_flex_template(row['title'], row['image'], row['link']))
+        content.append(stream_flex_template(row['id'], row['title'], row['image'], row['link']))
     return {
         "type": "carousel",
         "contents": content
     }
 
 
-def game_flex_template(guest_image, main_image, score, people, location, date):
+def game_flex_template(id, guest_image, main_image, score, people, location, date):
     return {
         "type": "bubble",
         "header": {
@@ -124,16 +134,34 @@ def game_flex_template(guest_image, main_image, score, people, location, date):
                 "align": "center",
                 "size": "md",
                 "margin": "md"
-            }, {
-                "type": "button",
-                "action": {
-                    "type": "uri",
-                    "label": "官方網站",
-                    "uri": "https://pleagueofficial.com/schedule-regular-season"
-                },
-                "style": "link"
             }
             ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "horizontal",
+            "spacing": "sm",
+            "contents": [
+                 {
+                    "type": "button",
+                    "action": {
+                        "type": "uri",
+                        "label": "官方網站",
+                        "uri": "https://pleagueofficial.com/schedule-regular-season"
+                    },
+                    "style": "link"
+                }, {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "uri",
+                        "label": "分享",
+                        "uri": f"{SHARE_LINK}/?game={id}"
+                    }
+                }
+            ],
+            "flex": 0
         }
     }
 
@@ -144,6 +172,7 @@ def last_games_flex():
     for row in rows:
         content.append(
             game_flex_template(
+                row['id'],
                 row['customer_image'],
                 row['main_image'],
                 row['score'],
@@ -162,6 +191,7 @@ def next_games_flex():
     for row in rows:
         content.append(
             game_flex_template(
+                row['id'],
                 row['customer_image'],
                 row['main_image'],
                 row['score'],
