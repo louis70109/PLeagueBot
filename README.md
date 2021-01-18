@@ -3,7 +3,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-%3E%3D%203.5-blue.svg)](https://badge.fury.io/py/lotify)
 
-![](https://qr-official.line.me/sid/L/611lsquw.png)
+![](https://i.imgur.com/8FwPz53.png)
+
 
 It builds by:
 
