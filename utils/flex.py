@@ -188,8 +188,8 @@ def help_flex():
                             "type": "button",
                             "action": {
                                 "type": "message",
-                                "label": "排定直播",
-                                "text": "排定直播"
+                                "label": "最新影片",
+                                "text": "最新影片"
                             }
                         },
                         {
