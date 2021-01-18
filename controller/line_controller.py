@@ -38,13 +38,13 @@ class LineController(Resource):
         alt = '觀看更多'
         quick_reply = QuickReply(
             items=[
-                QuickReplyButton(action=MessageAction(label="排定直播", text="排定直播")),
+                QuickReplyButton(action=MessageAction(label="最新影片", text="最新影片")),
                 QuickReplyButton(action=MessageAction(label="歷史例行賽賽程", text="歷史例行賽賽程")),
                 QuickReplyButton(action=MessageAction(label="例行賽剩餘賽程", text="例行賽剩餘賽程"))
             ])
-        if text == '排定直播':
+        if text == '最新影片':
             flex = stream_flex()
-            alt = 'Youtube 直播'
+            alt = '最新影片'
         elif text == '歷史例行賽賽程':
             flex = last_games_flex()
             alt = '歷史例行賽賽程'
