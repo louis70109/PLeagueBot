@@ -192,6 +192,9 @@ def insert_to_player_rank(ranks):
 
 
 def full_ranking():
+    print("Check DB status")
+    db_table_check()
+    print("Check DB Done")
     res = requests.get('https://pleagueofficial.com/stat_ranking', headers={
             'User-Agent': 'Firefox browser\'s user-agent',
         })
