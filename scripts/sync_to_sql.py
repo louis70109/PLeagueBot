@@ -10,6 +10,7 @@ import urllib.parse as urlparse
 import os
 from lotify.client import Client
 
+
 URL = urlparse.urlparse(os.getenv('DATABASE_URL'))
 DB_NAME = URL.path[1:]
 USER = URL.username
