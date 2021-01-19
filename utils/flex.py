@@ -1,6 +1,6 @@
 import os
 
-from utils.db import find_streams, find_last_games, find_next_games
+from utils.db import find_streams, find_last_games, find_next_games, find_players_rank
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -142,7 +142,7 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
             "layout": "horizontal",
             "spacing": "sm",
             "contents": [
-                 {
+                {
                     "type": "button",
                     "action": {
                         "type": "uri",
@@ -242,4 +242,123 @@ def help_flex():
                 }
             }
         ]
+    }
+
+
+def player_rank_flex_template(rows):
+    mapping = {
+        'scores': '得分',
+        'rebounds': '籃板',
+        'assists': '助攻',
+        'steals': '抄截',
+        'blocks': '阻攻',
+        'two': '兩分球',
+        'three': '三分球',
+        'freethrow': '發球'
+    }
+    content, rank_name = [], ''
+    for row in rows:
+        rank_name = row.get('rank_name')
+        content.append({
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [{
+                "type": "text",
+                "text": row.get('player'),
+                "size": "lg",
+                "color": "#555555",
+                "flex": 0
+            }, {
+                "type": "text",
+                "text": row.get('average'),
+                "size": "sm",
+                "color": "#111111",
+                "align": "end"
+            }]
+        })
+        content.append({
+            "type": "box",
+            "layout": "vertical",
+            "contents": [{
+                "type": "text",
+                "text": row.get('team'),
+                "size": "xxs",
+                "color": "#aaaaaa",
+                "wrap": True,
+                "gravity": "top"
+            }]
+        })
+
+    return {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [{
+                "type": "text",
+                "text": "排行榜",
+                "weight": "bold",
+                "color": "#1DB446",
+                "size": "sm"
+            }, {
+                "type": "text",
+                "text": mapping[rank_name],
+                "weight": "bold",
+                "size": "xxl",
+                "margin": "md"
+            }, {
+                "type": "text",
+                "text": "P. League+",
+                "size": "xs",
+                "color": "#aaaaaa",
+                "wrap": True
+            }, {
+                "type": "separator",
+                "margin": "xxl"
+            }, {
+                "type": "box",
+                "layout": "vertical",
+                "margin": "xxl",
+                "spacing": "sm",
+                "contents": content
+            }, {
+                "type": "separator",
+                "margin": "xxl"
+            }]
+        },
+        "styles": {
+            "footer": {
+                "separator": True
+            }
+        }
+    }
+
+
+def mapping_rank_name(rows):
+    mapping = [
+        'scores',
+        'rebounds',
+        'assists',
+        'steals',
+        'blocks',
+        'two',
+        'three',
+        'freethrow'
+    ]
+    ranking, content = [], []
+    for name in mapping:
+        for row in rows:
+            if row.get('rank_name') == name:
+                ranking.append(row)
+        content.append(player_rank_flex_template(ranking))
+        ranking = []
+    return content
+
+
+def rank_flex():
+    rows = find_players_rank()
+
+    return {
+        "type": "carousel",
+        "contents": mapping_rank_name(rows)
     }

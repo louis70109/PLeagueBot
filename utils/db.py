@@ -74,3 +74,11 @@ def find_stream(id):
         cur.execute(f"SELECT * FROM stream WHERE id = {id}")
         row = cur.fetchone()
     return row
+
+
+def find_players_rank():
+    with Database() as db, db.connect() as conn, conn.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM player_rank")
+        rows = cur.fetchall()
+    return rows
