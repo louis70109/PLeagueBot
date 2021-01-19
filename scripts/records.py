@@ -67,7 +67,7 @@ def db_table_check():
 
                 ALTER TABLE public.team_rank
                     OWNER to {USER};
-                ALTER TABLE public.player_rank"
+                ALTER TABLE public.player_rank
                     OWNER to {USER};
             ''')
             conn.commit()
