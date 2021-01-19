@@ -221,21 +221,26 @@ def help_flex():
                                 "label": "最新影片",
                                 "text": "最新影片"
                             }
-                        },
-                        {
+                        }, {
                             "type": "button",
                             "action": {
                                 "type": "message",
                                 "label": "歷史例行賽賽程",
                                 "text": "歷史例行賽賽程"
                             }
-                        },
-                        {
+                        }, {
                             "type": "button",
                             "action": {
                                 "type": "message",
                                 "label": "例行賽剩餘賽程",
                                 "text": "例行賽剩餘賽程"
+                            }
+                        }, {
+                            "type": "button",
+                            "action": {
+                                "type": "message",
+                                "label": "球員數據排行榜",
+                                "text": "球員數據排行榜"
                             }
                         }
                     ]
