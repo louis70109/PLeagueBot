@@ -135,7 +135,6 @@ def all_game():
             'User-Agent': 'Google browser\'s user-agent',
         })
     soup = BeautifulSoup(schedule.content, 'html.parser')
-    print(soup.prettify())
     date, week, time, teams, images, scores, places, people = [], [], [], [], [], [], [], []
     for dt in soup.find_all(class_='fs16 mt-2 mb-1'):
         date.append(dt.get_text())
@@ -186,8 +185,8 @@ def arrange_lists_to_one(event, teams, scores, places, people, images) -> list:
 def insert_or_update_to_game(games: list):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute('DELETE FROM game')
         for game in games:
-            cur.execute('DELETE FROM game')
             cur.execute(f'''
                 INSERT INTO game (customer, customer_image, main, main_image, score, people, place, event_date)
                     VALUES (
@@ -199,12 +198,6 @@ def insert_or_update_to_game(games: list):
                     '{game.get('people')}', 
                     '{game.get('place')}',
                     '{game.get('event_date')}')
-                ON CONFLICT ON CONSTRAINT game_unique
-                DO UPDATE SET
-                    score = '{game.get('score')}',
-                    people = '{game.get('people')}',
-                    place = '{game.get('place')}',
-                    event_date = '{game.get('event_date')}'
             ''')
         conn.commit()
 
