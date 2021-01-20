@@ -186,6 +186,7 @@ def insert_or_update_to_game(games: list):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         for game in games:
+            cur.execute('DELETE FROM game')
             cur.execute(f'''
                 INSERT INTO game (customer, customer_image, main, main_image, score, people, place, event_date)
                     VALUES (
