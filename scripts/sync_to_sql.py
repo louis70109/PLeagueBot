@@ -111,7 +111,6 @@ def stream_parser():
 def insert_or_update_to_stream(streams):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute('DELETE FROM stream')
         print("Refresh stream table.")
         for stream in streams:
             cur.execute(f'''

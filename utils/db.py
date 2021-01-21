@@ -39,7 +39,7 @@ class Database:
 def find_streams():
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM stream limit 12")
+        cur.execute("SELECT * FROM stream ORDER BY id ASC LIMIT 12")
         rows = cur.fetchall()
     return rows
 
