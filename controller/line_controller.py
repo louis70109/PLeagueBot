@@ -38,10 +38,11 @@ class LineController(Resource):
         alt = '觀看更多'
         quick_reply = QuickReply(
             items=[
-                QuickReplyButton(action=MessageAction(label="最新影片", text="最新影片")),
+                QuickReplyButton(action=MessageAction(label="影片", text="最新影片")),
+                QuickReplyButton(action=MessageAction(label="新聞", text="最新新聞")),
                 QuickReplyButton(action=MessageAction(label="歷史例行賽賽程", text="歷史例行賽賽程")),
                 QuickReplyButton(action=MessageAction(label="例行賽剩餘賽程", text="例行賽剩餘賽程")),
-                QuickReplyButton(action=MessageAction(label="球員數據排行榜", text="球員數據排行榜"))
+                QuickReplyButton(action=MessageAction(label="球員排行榜", text="球員數據排行榜"))
             ])
         if text == '最新影片':
             flex = stream_flex()
@@ -55,7 +56,7 @@ class LineController(Resource):
         elif text == '球員數據排行榜':
             flex = rank_flex()
             alt = '球員數據排行榜'
-        elif text == 'news':
+        elif text == '最新新聞':
             flex = news_flex()
             alt = '最新新聞'
         else:

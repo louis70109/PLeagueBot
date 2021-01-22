@@ -84,9 +84,17 @@ def find_players_rank():
     return rows
 
 
-def find_news():
+def find_newsies():
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute("SELECT * FROM news ORDER BY date DESC LIMIT 12")
         rows = cur.fetchall()
     return rows
+
+
+def find_news(id):
+    with Database() as db, db.connect() as conn, conn.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(f"SELECT * FROM news WHERE id = {id}")
+        row = cur.fetchone()
+    return row

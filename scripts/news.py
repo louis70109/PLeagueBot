@@ -49,11 +49,14 @@ def db_table_check():
             cur.execute(f'''
                 CREATE TABLE public.news
                 (
+                    id serial NOT NULL PRIMARY KEY,                    
                     image character varying(255) COLLATE pg_catalog."default",
                     link character varying(255) COLLATE pg_catalog."default",
                     date character varying(12) COLLATE pg_catalog."default",
                     tag character varying(15) COLLATE pg_catalog."default" NOT NULL,
-                    "description" character varying(100) COLLATE  pg_catalog."default" NOT NULL
+                    "description" character varying(100) COLLATE  pg_catalog."default" NOT NULL,
+                    CONSTRAINT desc_unique UNIQUE (description)
+                    INCLUDE(description)                    
                 )
                 TABLESPACE pg_default;
 
@@ -80,19 +83,22 @@ def insert_news(news):
                     '{new.get('link')}',
                     '{new.get('tag')}',
                     '{new.get('description')}'
-                )''')
+                ) ON CONFLICT ON CONSTRAINT desc_unique
+                DO NOTHING''')
         conn.commit()
 
 
-def news():
+def news_crawler():
     print("Check DB status")
     db_table_check()
     print("Check DB Done")
+
     res = requests.get('https://pleagueofficial.com/news', headers={
         'User-Agent': 'Firefox browser\'s user-agent',
     })
     soup = BeautifulSoup(res.content, 'html.parser')
-
+    time.sleep(2)
+    print("Got news and clear them...")
     news = []
     for dt in soup.find_all(class_='col-lg-4 col-md-4 col-6 mb-md-5 mb-3 px-md-2 px-2'):
         new: dict = {}
@@ -104,19 +110,13 @@ def news():
             new['link'] = 'https://pleagueofficial.com' + news_more['href']
         new['date'] = dt.find(class_='text-light opacity-5 fs12').get_text()
         new['tag'] = dt.find(class_='news_cate fs12 float-right').get_text()
-        desc = dt.find(
+        new['description'] = dt.find(
             class_='text-light fs16 mt-3 line-height-12 font-weight-normal').get_text()
 
-        import urllib.parse as parser
-        new['description'] = parser.quote(desc)
-
         news.append(new)
-
+    time.sleep(1)
     insert_news(news)
+    print("Insert ok!")
 
 
-# time.sleep(1)
-# time.sleep(2)
-
-
-news()
+news_crawler()

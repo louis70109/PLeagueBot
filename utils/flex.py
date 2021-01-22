@@ -1,6 +1,7 @@
+import json
 import os
 
-from utils.db import find_streams, find_last_games, find_next_games, find_players_rank, find_news
+from utils.db import find_streams, find_last_games, find_next_games, find_players_rank, find_newsies
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -242,6 +243,13 @@ def help_flex():
                                 "label": "球員數據排行榜",
                                 "text": "球員數據排行榜"
                             }
+                        }, {
+                            "type": "button",
+                            "action": {
+                                "type": "message",
+                                "label": "新聞",
+                                "text": "最新新聞"
+                            }
                         }
                     ]
                 }
@@ -370,10 +378,9 @@ def rank_flex():
 
 
 def news_flex():
-    rows = find_news()
+    rows = find_newsies()
     content = []
     for row in rows:
-        print(row['description'])
         content.append(news_flex_template(row))
 
     return {
@@ -384,107 +391,129 @@ def news_flex():
 
 def news_flex_template(news):
     return {
-        "type": "carousel",
-        "contents": [{
-            "type": "bubble",
-            "body": {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [{
+                "type": "image",
+                "url": news['image'],
+                "size": "full",
+                "aspectMode": "cover",
+                "aspectRatio": "2:3",
+                "gravity": "top"
+            }, {
                 "type": "box",
                 "layout": "vertical",
                 "contents": [{
-                    "type": "image",
-                    "url": news['image'],
-                    "size": "full",
-                    "aspectMode": "cover",
-                    "aspectRatio": "2:3",
-                    "gravity": "top"
-                }, {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [{
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [{
-                            "type": "text",
-                            "text": news['date'],
-                            "size": "xl",
-                            "color": "#ffffff",
-                            "weight": "bold",
-                        }]
-                    }, {
-                        "type": "box",
-                        "layout": "baseline",
-                        "contents": [{
-                            "type": "text",
-                            "text": news['description'],
-                            "color": "#ebebeb",
-                            "size": "sm",
-                            "flex": 0,
-                            "wrap": True
-                        }],
-                        "spacing": "lg"
-                    }, {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [{
-                            "type": "filler"
-                        }, {
-                            "type": "box",
-                            "layout": "baseline",
-                            "contents": [{
-                                "type": "filler"
-                            }, {
-                                "type": "text",
-                                "text": "新聞連結",
-                                "color": "#ffffff",
-                                "flex": 0,
-                                "offsetTop": "-2px"
-                            }, {
-                                "type": "filler"
-                            }],
-                            "spacing": "sm",
-                            "action": {
-                                "type": "uri",
-                                "label": "新聞",
-                                "uri": news['link']
-                            }
-                        }, {
-                            "type": "filler"
-                        }],
-                        "borderWidth": "1px",
-                        "cornerRadius": "4px",
-                        "spacing": "sm",
-                        "borderColor": "#ffffff",
-                        "margin": "xxl",
-                        "height": "40px"
-                    }],
-                    "position": "absolute",
-                    "offsetBottom": "0px",
-                    "offsetStart": "0px",
-                    "offsetEnd": "0px",
-                    "backgroundColor": "#03303Acc",
-                    "paddingAll": "20px",
-                    "paddingTop": "18px"
-                }, {
                     "type": "box",
                     "layout": "vertical",
                     "contents": [{
                         "type": "text",
-                        "text": news['tag'],
+                        "text": news['date'],
+                        "size": "xl",
                         "color": "#ffffff",
+                        "weight": "bold",
+                    }]
+                }, {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [{
+                        "type": "text",
+                        "text": news['description'],
+                        "color": "#ebebeb",
+                        "size": "sm",
+                        "flex": 0,
+                        "wrap": True
+                    }],
+                    "spacing": "lg"
+                }, {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [{
+                        "type": "filler"
+                    }, {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [{
+                            "type": "filler"
+                        }, {
+                            "type": "text",
+                            "text": "新聞連結",
+                            "color": "#ffffff",
+                            "flex": 0,
+                            "offsetTop": "-2px"
+                        }, {
+                            "type": "filler"
+                        }],
+                        "spacing": "sm",
+                        "action": {
+                            "type": "uri",
+                            "label": "新聞",
+                            "uri": news['link']
+                        }
+                    }, {
+                        "type": "filler"
+                    }],
+                    "borderWidth": "1px",
+                    "cornerRadius": "4px",
+                    "spacing": "sm",
+                    "borderColor": "#ffffff",
+                    "margin": "xxl",
+                    "height": "40px"
+                }],
+                "position": "absolute",
+                "offsetBottom": "0px",
+                "offsetStart": "0px",
+                "offsetEnd": "0px",
+                "backgroundColor": "#03303Acc",
+                "paddingAll": "20px",
+                "paddingTop": "18px"
+            }, {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [{
+                    "type": "text",
+                    "text": news['tag'],
+                    "color": "#ffffff",
+                    "align": "center",
+                    "size": "xs",
+                    "offsetTop": "3px",
+                    "wrap": True
+                }],
+                "position": "absolute",
+                "cornerRadius": "20px",
+                "offsetTop": "18px",
+                "backgroundColor": "#ff334b",
+                "offsetStart": "18px",
+                "height": "25px",
+                "width": "100px"
+            }, {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "#點我分享",
                         "align": "center",
                         "size": "xs",
                         "offsetTop": "3px",
                         "wrap": True
-                    }],
-                    "position": "absolute",
-                    "cornerRadius": "20px",
-                    "offsetTop": "18px",
-                    "backgroundColor": "#ff334b",
-                    "offsetStart": "18px",
-                    "height": "25px",
-                    "width": "100px"
-                }],
-                "paddingAll": "0px"
-            }
-        }]
+                    }
+                ],
+                "position": "absolute",
+                "cornerRadius": "20px",
+                "offsetTop": "18px",
+                "backgroundColor": "#a6ed8e",
+                "height": "25px",
+                "width": "100px",
+                "offsetEnd": "18px",
+                "action": {
+                    "type": "uri",
+                    "label": "action",
+                    "uri": f"{SHARE_LINK}/?news={news.get('id')}"
+                }
+            }],
+            "paddingAll": "0px"
+        }
     }
