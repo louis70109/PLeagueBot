@@ -267,7 +267,7 @@ def player_rank_flex_template(rows):
         'blocks': '阻攻',
         'two': '兩分球',
         'three': '三分球',
-        'freethrow': '發球'
+        'freethrow': '罰球'
     }
     content, rank_name = [], ''
     for row in rows:
