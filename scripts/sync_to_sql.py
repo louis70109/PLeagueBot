@@ -77,7 +77,7 @@ def db_table_check():
     
                 ALTER TABLE public.game
                     OWNER to {USER};
-                ALTER TABLE public."stream"
+                ALTER TABLE public.stream
                     OWNER to {USER};
             ''')
             conn.commit()
@@ -184,7 +184,6 @@ def arrange_lists_to_one(event, teams, scores, places, people, images) -> list:
 def insert_or_update_to_game(games: list):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute('DELETE FROM game')
         for game in games:
             cur.execute(f'''
                 INSERT INTO game (customer, customer_image, main, main_image, score, people, place, event_date)
@@ -196,7 +195,13 @@ def insert_or_update_to_game(games: list):
                     '{game.get('score')}', 
                     '{game.get('people')}', 
                     '{game.get('place')}',
-                    '{game.get('event_date')}')
+                    '{game.get('event_date')}'
+                ) ON CONFLICT ON CONSTRAINT game_unique
+                DO UPDATE SET
+                score = '{game.get('score')}',
+                place = '{game.get('place')}',
+                people = '{game.get('people')}',
+                event_date = '{game.get('event_date')}'
             ''')
         conn.commit()
 
