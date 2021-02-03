@@ -542,7 +542,7 @@ def shop_flex_template(shop):
                 "url": shop['image'],
                 "size": "full",
                 "aspectMode": "cover",
-                "aspectRatio": "2:3",
+                "aspectRatio": "2:2",
                 "gravity": "top"
             }, {
                 "type": "box",
