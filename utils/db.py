@@ -103,7 +103,7 @@ def find_news(id: int):
 def find_shops():
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM shop ORDER BY id DESC LIMIT 12")
+        cur.execute("SELECT * FROM shop LIMIT 12")
         rows = cur.fetchall()
     return rows
 
