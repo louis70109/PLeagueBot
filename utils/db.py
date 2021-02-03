@@ -60,7 +60,7 @@ def find_last_games():
     return rows
 
 
-def find_game(id):
+def find_game(id: int):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute(f"SELECT * FROM game WHERE id = {id}")
@@ -68,7 +68,7 @@ def find_game(id):
     return row
 
 
-def find_stream(id):
+def find_stream(id: int):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute(f"SELECT * FROM stream WHERE id = {id}")
@@ -92,7 +92,7 @@ def find_newsies():
     return rows
 
 
-def find_news(id):
+def find_news(id: int):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute(f"SELECT * FROM news WHERE id = {id}")

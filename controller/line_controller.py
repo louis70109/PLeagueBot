@@ -13,7 +13,6 @@ from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex,
 
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
-NOTIFY_BIND_URL = f"https://liff.line.me/{os.getenv('LIFF_BIND_ID')}"
 
 
 class LineController(Resource):
