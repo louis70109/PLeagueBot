@@ -1,11 +1,9 @@
-import re
 import time
 
 import requests
 from bs4 import BeautifulSoup, element
 import psycopg2
 import psycopg2.extras
-
 import urllib.parse as urlparse
 import os
 
@@ -49,20 +47,18 @@ def db_table_check():
         with Database() as db, db.connect() as conn, conn.cursor(
                 cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(f'''
-                CREATE TABLE public.news
+                CREATE TABLE public.shop
                 (
                     id serial NOT NULL PRIMARY KEY,                    
                     image character varying(255) COLLATE pg_catalog."default",
-                    link character varying(255) COLLATE pg_catalog."default",
-                    date character varying(12) COLLATE pg_catalog."default",
-                    tag character varying(15) COLLATE pg_catalog."default" NOT NULL,
-                    "description" character varying(100) COLLATE  pg_catalog."default" NOT NULL,
-                    CONSTRAINT desc_unique UNIQUE (description)
-                    INCLUDE(description)                    
+                    product character varying(255) COLLATE pg_catalog."default",
+                    price character varying(12) COLLATE pg_catalog."default",
+                    CONSTRAINT product_unique UNIQUE (product)
+                    INCLUDE(product)                    
                 )
                 TABLESPACE pg_default;
 
-                ALTER TABLE public.news
+                ALTER TABLE public.shop
                     OWNER to {USER};
             ''')
             conn.commit()
@@ -73,26 +69,28 @@ def db_table_check():
         raise Exception(e)
 
 
-def insert_shop_data(news):
+def insert_shop_data(shops):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        for new in news:
+        for shop in shops:
             cur.execute(f'''
-                INSERT INTO news (product, image, price)
+                INSERT INTO shop (product, image, price)
                     VALUES (
-                    '{new.get('date')}', 
-                    '{new.get('image')}',
-                    '{new.get('link')}',
-                    '{new.get('tag')}',
-                    '{new.get('description')}'
-                ) ON CONFLICT ON CONSTRAINT desc_unique
-                DO NOTHING''')
+                    '{shop.get('product')}', 
+                    '{shop.get('image')}',
+                    '{shop.get('price')}'
+                ) ON CONFLICT ON CONSTRAINT product_unique
+                DO UPDATE SET
+                product = '{shop.get('product')}', 
+                image = '{shop.get('image')}',
+                price = '{shop.get('price')}'
+            ''')
         conn.commit()
 
 
-def news_crawler():
+def shop_crawler():
     print("Check DB status")
-    # db_table_check()
+    db_table_check()
     print("Check DB Done")
 
     res: models.Response = requests.get('https://pleagueofficial.com/shop', headers={
@@ -100,7 +98,7 @@ def news_crawler():
     })
 
     soup: BeautifulSoup = BeautifulSoup(res.content, 'html.parser')
-    # time.sleep(2)
+    time.sleep(2)
     print("Got shop data and clear them...")
     shops: list = []
     for dt in soup.find_all(class_='card product-card'):
@@ -113,9 +111,9 @@ def news_crawler():
         shop['price']: str = dt.find(class_='py-1 my-0 text-black fs18').get_text()
 
         shops.append(shop)
-    # time.sleep(1)
-    # insert_shop_data(news)
+    time.sleep(1)
+    insert_shop_data(shops)
     print("Insert ok!")
 
 
-news_crawler()
+shop_crawler()
