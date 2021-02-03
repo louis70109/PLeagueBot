@@ -9,7 +9,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import FlexSendMessage, MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction
 
-from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex, rank_flex, news_flex
+from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex, rank_flex, news_flex, shop_flex
 
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
@@ -41,7 +41,8 @@ class LineController(Resource):
                 QuickReplyButton(action=MessageAction(label="新聞", text="最新新聞")),
                 QuickReplyButton(action=MessageAction(label="歷史例行賽賽程", text="歷史例行賽賽程")),
                 QuickReplyButton(action=MessageAction(label="例行賽剩餘賽程", text="例行賽剩餘賽程")),
-                QuickReplyButton(action=MessageAction(label="球員排行榜", text="球員數據排行榜"))
+                QuickReplyButton(action=MessageAction(label="球員排行榜", text="球員數據排行榜")),
+                QuickReplyButton(action=MessageAction(label="商品", text="商品"))
             ])
         if text == '最新影片':
             flex = stream_flex()
@@ -58,6 +59,9 @@ class LineController(Resource):
         elif text == '最新新聞':
             flex = news_flex()
             alt = '最新新聞'
+        elif text == '商品':
+            flex = shop_flex()
+            alt = '來看看最近賣什麼吧！'
         else:
             flex = help_flex()
 
