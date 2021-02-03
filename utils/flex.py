@@ -1,7 +1,6 @@
-import json
 import os
 
-from utils.db import find_streams, find_last_games, find_next_games, find_players_rank, find_newsies
+from utils.db import find_streams, find_last_games, find_next_games, find_players_rank, find_newsies, find_shops
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -512,6 +511,149 @@ def news_flex_template(news):
                     "type": "uri",
                     "label": "action",
                     "uri": f"{SHARE_LINK}/?news={news.get('id')}"
+                }
+            }],
+            "paddingAll": "0px"
+        }
+    }
+
+
+
+def shop_flex():
+    rows = find_shops()
+    content = []
+    for row in rows:
+        content.append(shop_flex_template(row))
+
+    return {
+        "type": "carousel",
+        "contents": content
+    }
+
+
+def shop_flex_template(shop):
+    return {
+        "type": "bubble",
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [{
+                "type": "image",
+                "url": shop['image'],
+                "size": "full",
+                "aspectMode": "cover",
+                "aspectRatio": "2:3",
+                "gravity": "top"
+            }, {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [{
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [{
+                        "type": "text",
+                        "text": shop['product'],
+                        "size": "xl",
+                        "color": "#ffffff",
+                        "weight": "bold",
+                    }]
+                }, {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [{
+                        "type": "text",
+                        "text": shop['price'],
+                        "color": "#ebebeb",
+                        "size": "sm",
+                        "flex": 0,
+                        "wrap": True
+                    }],
+                    "spacing": "lg"
+                }, {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [{
+                        "type": "filler"
+                    }, {
+                        "type": "box",
+                        "layout": "baseline",
+                        "contents": [{
+                            "type": "filler"
+                        }, {
+                            "type": "text",
+                            "text": "購買連結",
+                            "color": "#ffffff",
+                            "flex": 0,
+                            "offsetTop": "-2px"
+                        }, {
+                            "type": "filler"
+                        }],
+                        "spacing": "sm",
+                        "action": {
+                            "type": "uri",
+                            "label": "物品",
+                            "uri": shop['link']
+                        }
+                    }, {
+                        "type": "filler"
+                    }],
+                    "borderWidth": "1px",
+                    "cornerRadius": "4px",
+                    "spacing": "sm",
+                    "borderColor": "#ffffff",
+                    "margin": "xxl",
+                    "height": "40px"
+                }],
+                "position": "absolute",
+                "offsetBottom": "0px",
+                "offsetStart": "0px",
+                "offsetEnd": "0px",
+                "backgroundColor": "#03303Acc",
+                "paddingAll": "20px",
+                "paddingTop": "18px"
+            }, {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [{
+                    "type": "text",
+                    "text": shop['tag'],
+                    "color": "#ffffff",
+                    "align": "center",
+                    "size": "xs",
+                    "offsetTop": "3px",
+                    "wrap": True
+                }],
+                "position": "absolute",
+                "cornerRadius": "20px",
+                "offsetTop": "18px",
+                "backgroundColor": "#ff334b",
+                "offsetStart": "18px",
+                "height": "25px",
+                "width": "100px"
+            }, {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "#點我分享",
+                        "align": "center",
+                        "size": "xs",
+                        "offsetTop": "3px",
+                        "wrap": True
+                    }
+                ],
+                "position": "absolute",
+                "cornerRadius": "20px",
+                "offsetTop": "18px",
+                "backgroundColor": "#a6ed8e",
+                "height": "25px",
+                "width": "100px",
+                "offsetEnd": "18px",
+                "action": {
+                    "type": "uri",
+                    "label": "action",
+                    "uri": f"{SHARE_LINK}/?shop={shop.get('id')}"
                 }
             }],
             "paddingAll": "0px"

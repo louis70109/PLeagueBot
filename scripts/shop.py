@@ -51,6 +51,7 @@ def db_table_check():
                 (
                     id serial NOT NULL PRIMARY KEY,                    
                     image character varying(255) COLLATE pg_catalog."default",
+                    link character varying(255) COLLATE pg_catalog."default",
                     product character varying(255) COLLATE pg_catalog."default",
                     price character varying(12) COLLATE pg_catalog."default",
                     CONSTRAINT product_unique UNIQUE (product)
@@ -74,15 +75,17 @@ def insert_shop_data(shops):
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         for shop in shops:
             cur.execute(f'''
-                INSERT INTO shop (product, image, price)
+                INSERT INTO shop (product, image, price, link)
                     VALUES (
                     '{shop.get('product')}', 
                     '{shop.get('image')}',
-                    '{shop.get('price')}'
+                    '{shop.get('price')}',
+                    '{shop.get('link')}'
                 ) ON CONFLICT ON CONSTRAINT product_unique
                 DO UPDATE SET
                 product = '{shop.get('product')}', 
                 image = '{shop.get('image')}',
+                link = '{shop.get('link')}',
                 price = '{shop.get('price')}'
             ''')
         conn.commit()
@@ -105,10 +108,13 @@ def shop_crawler():
         shop: dict = {}
         img: element.Tag = dt.find('img')
         if 'src' in img.attrs and (img['src'].endswith('.png') or img['src'].endswith('.jpg')):
-            shop['image']: str = 'https://pleagueofficial.com' + img['src']
+            shop['image']: str = 'https:' + img['src']
 
         shop['product']: str = dt.find(class_='fs12 py-0 my-0 text-black').get_text()
         shop['price']: str = dt.find(class_='py-1 my-0 text-black fs18').get_text()
+        link = dt.find('a', class_='btn btn-black btn-sm btn-block btn-square text-light')
+        if 'href' in link.attrs and link['href'].startswith('/product-item'):
+            shop['link'] = 'https://pleagueofficial.com' + link['href']
 
         shops.append(shop)
     time.sleep(1)

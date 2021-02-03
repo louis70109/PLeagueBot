@@ -98,3 +98,19 @@ def find_news(id: int):
         cur.execute(f"SELECT * FROM news WHERE id = {id}")
         row = cur.fetchone()
     return row
+
+
+def find_shops():
+    with Database() as db, db.connect() as conn, conn.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute("SELECT * FROM shop ORDER BY date DESC LIMIT 12")
+        rows = cur.fetchall()
+    return rows
+
+
+def find_shop(id: int):
+    with Database() as db, db.connect() as conn, conn.cursor(
+            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+        cur.execute(f"SELECT * FROM shop WHERE id = {id}")
+        row = cur.fetchone()
+    return row
