@@ -1,4 +1,3 @@
-import re
 import time
 
 import requests
@@ -92,7 +91,6 @@ def news_crawler():
     print("Check DB status")
     db_table_check()
     print("Check DB Done")
-
     res = requests.get('https://pleagueofficial.com/news', headers={
         'User-Agent': 'Firefox browser\'s user-agent',
     })
