@@ -616,7 +616,7 @@ def shop_flex_template(shop):
                 "layout": "vertical",
                 "contents": [{
                     "type": "text",
-                    "text": shop['tag'],
+                    "text": "熱賣！",
                     "color": "#ffffff",
                     "align": "center",
                     "size": "xs",
