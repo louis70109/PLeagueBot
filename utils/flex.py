@@ -210,8 +210,7 @@ def next_games_flex():
                 row['people'],
                 row['place'],
                 row['event_date']))
-    return  content
-
+    return content
 
 
 def help_flex():

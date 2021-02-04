@@ -3,7 +3,8 @@ from flask import request, render_template, Response
 from flask_restful import Resource
 
 from utils.db import find_game, find_stream, find_news, find_shop
-from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template
+from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template, \
+    flex_message_type_condition
 
 LIFF_ID = os.getenv('LIFF_SHARE_ID')
 
@@ -44,12 +45,9 @@ class LiffController(Resource):
             row = find_news(news)
             content.append(news_flex_template(row))
         elif shop:
-            alt = "我找到一篇 P+ 的新聞啦！！"
+            alt = "分享個 P+ 商品給你～"
             row = find_shop(shop)
             content.append(shop_flex_template(row))
 
-        msg = {"type": "flex", "altText": alt, "contents": {**{
-            "type": "carousel",
-            "contents": content
-        }}}
+        msg = flex_message_type_condition(alt, content)
         return Response(render_template('share_message.html', flex=msg, liff_id=LIFF_ID))
