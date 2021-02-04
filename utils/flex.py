@@ -1,9 +1,27 @@
 import os
 
+from linebot.models import FlexSendMessage
+
 from utils.db import find_streams, find_last_games, find_next_games, find_players_rank, find_newsies, find_shops
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
+
+
+def flex_message_type_condition(alt: str, contents: list or dict, **kwargs):
+    if type(contents) == list:
+        output_flex_message = {
+            "type": "carousel",
+            "contents": [*contents]
+        }
+    else:
+        output_flex_message = {**contents}
+
+    return FlexSendMessage(
+        alt,
+        output_flex_message,
+        **kwargs
+    )
 
 
 def stream_flex_template(id, title, image, link):
@@ -518,17 +536,12 @@ def news_flex_template(news):
     }
 
 
-
-def shop_flex():
+def shop_flex() -> list:
     rows = find_shops()
     content = []
     for row in rows:
         content.append(shop_flex_template(row))
-
-    return {
-        "type": "carousel",
-        "contents": content
-    }
+    return content
 
 
 def shop_flex_template(shop):

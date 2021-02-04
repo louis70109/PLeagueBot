@@ -9,7 +9,8 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import FlexSendMessage, MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction
 
-from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex, rank_flex, news_flex, shop_flex
+from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex, rank_flex, news_flex, shop_flex, \
+    flex_message_type_condition
 
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
@@ -65,9 +66,9 @@ class LineController(Resource):
         else:
             flex = help_flex()
 
-        flex_message = FlexSendMessage(
-            alt_text=alt,
-            contents=flex,
+        flex_message = flex_message_type_condition(
+            alt,
+            flex,
             quick_reply=quick_reply
         )
         line_bot_api.reply_message(
