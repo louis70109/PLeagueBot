@@ -86,10 +86,7 @@ def stream_flex():
     content = []
     for row in rows:
         content.append(stream_flex_template(row['id'], row['title'], row['image'], row['link']))
-    return {
-        "type": "carousel",
-        "contents": content
-    }
+    return content
 
 
 def game_flex_template(id, guest_image, main_image, score, people, location, date):
@@ -197,10 +194,7 @@ def last_games_flex():
                 row['people'],
                 row['place'],
                 row['event_date']))
-    return {
-        "type": "carousel",
-        "contents": content
-    }
+    return content
 
 
 def next_games_flex():
@@ -216,10 +210,8 @@ def next_games_flex():
                 row['people'],
                 row['place'],
                 row['event_date']))
-    return {
-        "type": "carousel",
-        "contents": content
-    }
+    return  content
+
 
 
 def help_flex():
@@ -388,10 +380,7 @@ def mapping_rank_name(rows):
 def rank_flex():
     rows = find_players_rank()
 
-    return {
-        "type": "carousel",
-        "contents": mapping_rank_name(rows)
-    }
+    return mapping_rank_name(rows)
 
 
 def news_flex():
@@ -400,10 +389,7 @@ def news_flex():
     for row in rows:
         content.append(news_flex_template(row))
 
-    return {
-        "type": "carousel",
-        "contents": content
-    }
+    return content
 
 
 def news_flex_template(news):
