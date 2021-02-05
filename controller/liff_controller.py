@@ -49,5 +49,8 @@ class LiffController(Resource):
             row = find_shop(shop)
             content.append(shop_flex_template(row))
 
-        msg = flex_message_type_condition(alt, content)
+        msg = {"type": "flex", "altText": alt, "contents": {**{
+            "type": "carousel",
+            "contents": content
+        }}}
         return Response(render_template('share_message.html', flex=msg, liff_id=LIFF_ID))
