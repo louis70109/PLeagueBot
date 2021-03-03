@@ -99,7 +99,7 @@ def stream_parser():
         "sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"]
     streams = []
     for data in clean_list:
-        image = data["gridVideoRenderer"]["thumbnail"]['thumbnails'][3]["url"]
+        image = data["gridVideoRenderer"]["thumbnail"]['thumbnails'][3]["url"].split('?sqp')[0]
         title = data["gridVideoRenderer"]["title"]["runs"][0]["text"]
         link_path = "https://www.youtube.com/" + \
                     data["gridVideoRenderer"]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"]
