@@ -92,7 +92,7 @@ def stream_parser():
     yt = requests.get('https://www.youtube.com/c/PLEAGUEofficial/videos?view=2&sort=dd&live_view=502&shelf_id=2')
     message = BeautifulSoup(yt.content, 'html.parser')
     video_scripts = message.find_all('script')
-    bs_to_string = str(video_scripts[27])
+    bs_to_string = str(video_scripts[32])
     variable_string = bs_to_string.split('var ytInitialData = ')[1].split(';')[0]
     variable_dict = json.loads(variable_string)
     clean_list = variable_dict["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"]["content"][
