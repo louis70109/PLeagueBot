@@ -1,3 +1,5 @@
+import re
+
 import psycopg2
 import psycopg2.extras
 import urllib.parse as urlparse
@@ -36,81 +38,54 @@ class Database:
         self.conns.clear()
 
 
-def find_streams():
+def fetch(query: str):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM stream ORDER BY id DESC LIMIT 12")
-        rows = cur.fetchall()
-    return rows
+        cur.execute(query)
+        fetch_condition = re.compile(r'(LIMIT 1)$|(LIMIT 1)\s+')
+
+        if fetch_condition.search(query) is None:
+            data = cur.fetchall()
+        else:
+            data = cur.fetchone()
+    return data
+
+
+def find_streams():
+    return fetch("SELECT * FROM stream ORDER BY id DESC LIMIT 12")
 
 
 def find_next_games():
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM game WHERE score = '0：0' ORDER BY id ASC LIMIT 12")
-        rows = cur.fetchall()
-    return rows
+    return fetch("SELECT * FROM game WHERE score = '0：0' ORDER BY id ASC LIMIT 12")
 
 
 def find_last_games():
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM game WHERE score != '0：0' ORDER BY id DESC LIMIT 12")
-        rows = cur.fetchall()
-    return rows
+    return fetch("SELECT * FROM game WHERE score != '0：0' ORDER BY id DESC LIMIT 12")
 
 
 def find_game(id: int):
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute(f"SELECT * FROM game WHERE id = {id}")
-        row = cur.fetchone()
-    return row
+    return fetch(f"SELECT * FROM game WHERE id = {id}")
 
 
 def find_stream(id: int):
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute(f"SELECT * FROM stream WHERE id = {id}")
-        row = cur.fetchone()
-    return row
+    return fetch(f"SELECT * FROM stream WHERE id = {id}")
 
 
 def find_players_rank():
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM player_rank")
-        rows = cur.fetchall()
-    return rows
+    return fetch("SELECT * FROM player_rank")
 
 
 def find_newsies():
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM news ORDER BY date DESC LIMIT 12")
-        rows = cur.fetchall()
-    return rows
+    return fetch("SELECT * FROM news ORDER BY date DESC LIMIT 12")
 
 
 def find_news(id: int):
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute(f"SELECT * FROM news WHERE id = {id}")
-        row = cur.fetchone()
-    return row
+    return fetch(f"SELECT * FROM news WHERE id = {id}")
 
 
 def find_shops():
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute("SELECT * FROM shop LIMIT 12")
-        rows = cur.fetchall()
-    return rows
+    return fetch("SELECT * FROM shop LIMIT 12")
 
 
 def find_shop(id: int):
-    with Database() as db, db.connect() as conn, conn.cursor(
-            cursor_factory=psycopg2.extras.RealDictCursor) as cur:
-        cur.execute(f"SELECT * FROM shop WHERE id = {id}")
-        row = cur.fetchone()
-    return row
+    return fetch(f"SELECT * FROM shop WHERE id = {id}")
