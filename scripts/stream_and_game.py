@@ -9,7 +9,8 @@ import psycopg2.extras
 import urllib.parse as urlparse
 import os
 from lotify.client import Client
-
+lotify = Client()
+notify = os.getenv('LINE_NOTIFY_TOKEN')
 
 URL = urlparse.urlparse(os.getenv('DATABASE_URL'))
 DB_NAME = URL.path[1:]
@@ -137,12 +138,15 @@ def all_game():
         })
     soup = BeautifulSoup(schedule.content, 'html.parser')
     date, week, time, teams, images, scores, places, people = [], [], [], [], [], [], [], []
-    for dt in soup.find_all(class_='fs16 mt-2 mb-1'):
-        date.append(dt.get_text())
-    for wk in soup.find_all(class_='fs12 mb-2'):
-        week.append(wk.get_text())
-    for t in soup.select('.col-lg-1.col-12.text-center.align-self-center.match_row_datetime > h6[class~=fs12]'):
-        time.append(t.get_text())
+    try:
+        for dt in soup.find_all(class_='fs16 mt-2 mb-1'):
+            date.append(dt.get_text())
+        for wk in soup.find_all(class_='fs12 mb-2'):
+            week.append(wk.get_text())
+        for t in soup.select('.col-lg-1.col-12.text-center.align-self-center.match_row_datetime > h6[class~=fs12]'):
+            time.append(t.get_text())
+    except Exception as e:
+        lotify.send_message(access_token=notify, message=f'比賽資訊網站格式錯誤 \n{e}')
 
     event_date = []  # Arrange date to one
     for index in range(len(date)):

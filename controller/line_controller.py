@@ -6,7 +6,7 @@ from linebot import (
     LineBotApi, WebhookHandler
 )
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import FlexSendMessage, MessageEvent, TextMessage, \
+from linebot.models import MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction
 
 from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex, rank_flex, news_flex, shop_flex, \
