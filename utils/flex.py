@@ -12,11 +12,10 @@ def flex_message_type_condition(alt: str, contents: list or dict, **kwargs):
     if type(contents) == list:
         output_flex_message = {
             "type": "carousel",
-            "contents": [*contents]
+            "contents": contents
         }
     else:
-        output_flex_message = {**contents}
-
+        output_flex_message = contents
     return FlexSendMessage(
         alt,
         output_flex_message,
