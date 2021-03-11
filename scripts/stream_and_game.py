@@ -9,6 +9,7 @@ import psycopg2.extras
 import urllib.parse as urlparse
 import os
 from lotify.client import Client
+
 lotify = Client()
 notify = os.getenv('LINE_NOTIFY_TOKEN')
 
@@ -214,14 +215,27 @@ def insert_or_update_to_game(games: list):
 
 def main():
     print('Check tables status...')
-    db_table_check()
+    try:
+        db_table_check()
+    except Exception as e:
+        lotify.send_message(access_token=notify, message=f'DB 建立出錯 \n{e}')
     time.sleep(1)
     print('Youtube stream loading...')
-    streams = stream_parser()
+    try:
+        streams = stream_parser()
+    except Exception as e:
+        lotify.send_message(
+            access_token=notify,
+            message=f'Youtube 爬蟲出事啦\n{e}')
     print('Stream gotcha!')
     time.sleep(1)
     print('Sync stream data to database.')
-    insert_or_update_to_stream(streams)
+    try:
+        insert_or_update_to_stream(streams)
+    except Exception:
+        lotify.send_message(
+            access_token=notify,
+            message=f'影片檔案資訊無法進入 db\n陣列: {str(streams)}')
     print('Sync games...')
     event_date, teams, scores, places, people, images = all_game()
     print('Sync game data to database...')
@@ -229,7 +243,12 @@ def main():
     print('Game arrange done.')
     time.sleep(2)
     print('Ready to insert games.')
-    insert_or_update_to_game(games)
+    try:
+        insert_or_update_to_game(games)
+    except Exception:
+        lotify.send_message(
+            access_token=notify,
+            message=f'比賽資訊無法進入 db\n陣列: {str(games)}')
     print('Insert games done.')
 
 
