@@ -257,6 +257,13 @@ def help_flex():
                                 "label": "新聞",
                                 "text": "最新新聞"
                             }
+                        }, {
+                            "type": "button",
+                            "action": {
+                                "type": "message",
+                                "label": "購物商城",
+                                "text": "商品"
+                            }
                         }
                     ]
                 }
