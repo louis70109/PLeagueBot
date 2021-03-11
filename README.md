@@ -5,8 +5,11 @@
 
 ![](https://i.imgur.com/8FwPz53.png)
 
+<img height="200" border="0" alt="QRcode" src="https://qr-official.line.me/sid/L/611lsquw.png">
 
-It builds by:
+<a href="https://line.me/R/ti/p/%40611lsquw"><img height="50" border="0" alt="加入好友" src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"></a>
+
+# Prerequisite
 
 - flask/Python 3.8
 - LINE v10.14

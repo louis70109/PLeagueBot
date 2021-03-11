@@ -663,3 +663,50 @@ def shop_flex_template(shop):
             "paddingAll": "0px"
         }
     }
+
+
+def add_me():
+    return {
+        "type": "bubble",
+        "hero": {
+            "type": "image",
+            "url": "https://qr-official.line.me/sid/L/611lsquw.png",
+            "size": "full",
+            "aspectMode": "fit",
+            "action": {
+                "type": "uri",
+                "uri": "https://line.me/R/ti/p/%40611lsquw"
+            }
+        },
+        "body": {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+                {
+                    "type": "text",
+                    "text": "P+ 聯盟活動小幫手",
+                    "weight": "bold",
+                    "size": "xxl",
+                    "align": "center"
+                }
+            ]
+        },
+        "footer": {
+            "type": "box",
+            "layout": "vertical",
+            "spacing": "sm",
+            "contents": [
+                {
+                    "type": "button",
+                    "style": "link",
+                    "height": "sm",
+                    "action": {
+                        "type": "uri",
+                        "label": "加入好友(點我)",
+                        "uri": "https://line.me/R/ti/p/%40611lsquw"
+                    }
+                }
+            ],
+            "flex": 0
+        }
+    }
