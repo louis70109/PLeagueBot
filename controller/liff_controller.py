@@ -3,8 +3,7 @@ from flask import request, render_template, Response
 from flask_restful import Resource
 
 from utils.db import find_game, find_stream, find_news, find_shop
-from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template, \
-    flex_message_type_condition, add_me
+from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template, add_me
 
 LIFF_ID = os.getenv('LIFF_SHARE_ID')
 
