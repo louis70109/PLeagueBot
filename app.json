@@ -10,7 +10,7 @@
   ],
   "addons": ["heroku-postgresql:hobby-dev", "papertrail"],
   "env": {
-    "PY_ENV": "production"
+    "FLASK_ENV": "production"
   },
   "buildpacks": [
     {
