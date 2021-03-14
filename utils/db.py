@@ -55,18 +55,6 @@ def find_streams():
     return fetch("SELECT * FROM stream ORDER BY id DESC LIMIT 12")
 
 
-def find_next_games():
-    return fetch("SELECT * FROM game WHERE score = '0：0' ORDER BY id ASC LIMIT 12")
-
-
-def find_last_games():
-    return fetch("SELECT * FROM game WHERE score != '0：0' ORDER BY id DESC LIMIT 12")
-
-
-def find_game(id: int):
-    return fetch(f"SELECT * FROM game WHERE id = {id}")
-
-
 def find_stream(id: int):
     return fetch(f"SELECT * FROM stream WHERE id = {id}")
 

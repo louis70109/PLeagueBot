@@ -51,20 +51,6 @@ def db_table_check():
         with Database() as db, db.connect() as conn, conn.cursor(
                 cursor_factory=psycopg2.extras.RealDictCursor) as cur:
             cur.execute(f'''
-                CREATE TABLE public.game
-                (
-                    id serial NOT NULL PRIMARY KEY,
-                    customer character varying(50) COLLATE pg_catalog."default",
-                    customer_image character varying(200) COLLATE pg_catalog."default",
-                    main character varying(50) COLLATE pg_catalog."default",
-                    main_image character varying(200) COLLATE pg_catalog."default",
-                    score character varying(10) COLLATE pg_catalog."default",
-                    people character varying(15) COLLATE pg_catalog."default",
-                    place character varying(20) COLLATE pg_catalog."default",
-                    event_date character varying(30) COLLATE pg_catalog."default",
-                    CONSTRAINT game_unique UNIQUE (customer, main, place, event_date)
-                        INCLUDE(customer, main, place, event_date)
-                );
                 CREATE TABLE public.stream
                 (
                     id serial NOT NULL PRIMARY KEY,

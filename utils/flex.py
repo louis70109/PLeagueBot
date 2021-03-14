@@ -1,8 +1,10 @@
 import os
 
 from linebot.models import FlexSendMessage
+from sqlalchemy import text
 
-from utils.db import find_streams, find_last_games, find_next_games, find_players_rank, find_newsies, find_shops
+from models.game import Game
+from utils.db import find_streams, find_players_rank, find_newsies, find_shops
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -181,34 +183,32 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
 
 
 def last_games_flex():
-    rows = find_last_games()
     content = []
-    for row in rows:
+    for row in Game.query.filter(Game.score != '0：0').order_by(text("id desc")).limit(12).all():
         content.append(
             game_flex_template(
-                row['id'],
-                row['customer_image'],
-                row['main_image'],
-                row['score'],
-                row['people'],
-                row['place'],
-                row['event_date']))
+                row.id,
+                row.customer_image,
+                row.main_image,
+                row.score,
+                row.people,
+                row.place,
+                row.event_date))
     return content
 
 
 def next_games_flex():
-    rows = find_next_games()
     content = []
-    for row in rows:
+    for row in Game.query.filter_by(score='0：0').order_by(text("id asc")).limit(12).all():
         content.append(
             game_flex_template(
-                row['id'],
-                row['customer_image'],
-                row['main_image'],
-                row['score'],
-                row['people'],
-                row['place'],
-                row['event_date']))
+                row.id,
+                row.customer_image,
+                row.main_image,
+                row.score,
+                row.people,
+                row.place,
+                row.event_date))
     return content
 
 

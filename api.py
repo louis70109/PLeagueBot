@@ -6,6 +6,8 @@ from flask_cors import CORS
 from flask_restful import Api
 from lotify.client import Client
 
+from models.database import db
+
 if os.getenv('PY_ENV') != 'production':
     from dotenv import load_dotenv
 
@@ -16,6 +18,12 @@ from controller.liff_controller import LiffController
 
 app = Flask(__name__)
 CORS(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db.init_app(app)
+with app.app_context():
+    db.create_all()
 
 api = Api(app)
 

@@ -2,7 +2,8 @@ import os
 from flask import request, render_template, Response
 from flask_restful import Resource
 
-from utils.db import find_game, find_stream, find_news, find_shop
+from models.game import Game
+from utils.db import find_stream, find_news, find_shop
 from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template, add_me
 
 LIFF_ID = os.getenv('LIFF_SHARE_ID')
@@ -24,16 +25,16 @@ class LiffController(Resource):
         alt = '你已被標註。'
         if game:
             alt = "分享 P+ 聯盟賽程給你"
-            row = find_game(game)
+            row = Game.query.filter_by(id=game).first()
 
             content.append(game_flex_template(
-                row['id'],
-                row['customer_image'],
-                row['main_image'],
-                row['score'],
-                row['people'],
-                row['place'],
-                row['event_date'])
+                row.id,
+                row.customer_image,
+                row.main_image,
+                row.score,
+                row.people,
+                row.place,
+                row.event_date)
             )
         elif stream:
             alt = "分享一個 P+ 影片給你"
