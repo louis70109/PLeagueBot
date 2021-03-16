@@ -4,6 +4,7 @@ from linebot.models import FlexSendMessage
 from sqlalchemy import text
 
 from models.game import Game
+from models.stream import Stream
 from utils.db import find_streams, find_players_rank, find_newsies, find_shops
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
@@ -83,10 +84,9 @@ def stream_flex_template(id, title, image, link):
 
 
 def stream_flex():
-    rows = find_streams()
     content = []
-    for row in rows:
-        content.append(stream_flex_template(row['id'], row['title'], row['image'], row['link']))
+    for row in Stream.query.order_by(text("id desc")).limit(12).all():
+        content.append(stream_flex_template(row.id, row.title, row.image, row.link))
     return content
 
 
@@ -686,7 +686,7 @@ def add_me():
                     "type": "text",
                     "text": "P+ 聯盟活動小幫手",
                     "weight": "bold",
-                    "size": "xxl",
+                    "size": "xl",
                     "align": "center"
                 }
             ]
