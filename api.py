@@ -8,9 +8,8 @@ from lotify.client import Client
 
 from models.database import db
 
-if os.getenv('PY_ENV') != 'production':
+if os.getenv('FLASK_ENV') != 'production':
     from dotenv import load_dotenv
-
     load_dotenv()
 
 from controller.line_controller import LineController

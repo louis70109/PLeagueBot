@@ -5,7 +5,7 @@ from sqlalchemy import text
 
 from models.game import Game
 from models.stream import Stream
-from utils.db import find_streams, find_players_rank, find_newsies, find_shops
+from utils.db import find_players_rank, find_newsies, find_shops
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
