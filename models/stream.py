@@ -11,18 +11,18 @@ class Stream(db.Model):
     link = db.Column(db.String(255))
     image = db.Column(db.String(255))
     title = db.Column(db.String(100))
-    is_alive = db.Column(db.Boolean(), default=True)
+    is_live = db.Column(db.Boolean(), default=True)
     __table_args__ = (db.UniqueConstraint('link', 'image', 'title', name='stream_unique'),)
 
     def __repr__(self):
         return f"<Stream (id={self.id}, link={self.link}, " \
                f"image={self.image}, tile={self.tile}, " \
-               f"is_alive={self.is_alive}>"
+               f"is_live={self.is_live}>"
 
-    def __init__(self, id, link, image, tile, is_alive, **kwargs):
+    def __init__(self, id, link, image, tile, is_live, **kwargs):
         super(Stream, self).__init__(**kwargs)
         self.id = id
         self.link = link
         self.image = image
         self.tile = tile
-        self.is_alive = is_alive
+        self.is_live = is_live
