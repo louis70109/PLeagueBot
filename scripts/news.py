@@ -101,7 +101,8 @@ def news_crawler():
     for dt in soup.find_all(class_='col-lg-4 col-md-4 col-6 mb-md-5 mb-3 px-md-2 px-2'):
         new: dict = {}
         img = dt.find('img')
-        if 'src' in img.attrs and (img['src'].endswith('.png') or img['src'].endswith('.jpg')):
+        if 'src' in img.attrs and (
+                img['src'].endswith('.png') or img['src'].endswith('.jpg') or img['src'].endswith('.jpeg')):
             new['image'] = 'https://pleagueofficial.com' + img['src']
         news_more = dt.find('a', class_='news_more')
         if 'href' in news_more.attrs and news_more['href'].startswith('/news-detail'):
