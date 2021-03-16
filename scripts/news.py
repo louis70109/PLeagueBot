@@ -83,7 +83,13 @@ def insert_news(news):
                     '{new.get('tag')}',
                     '{new.get('description')}'
                 ) ON CONFLICT ON CONSTRAINT desc_unique
-                DO NOTHING''')
+                DO UPDATE SET
+                date = '{new.get('date')}', 
+                image = '{new.get('image')}',
+                link = '{new.get('link')}',
+                tag = '{new.get('tag')}',
+                description = '{new.get('description')}'
+            ''')
         conn.commit()
 
 
@@ -104,6 +110,8 @@ def news_crawler():
         if 'src' in img.attrs and (
                 img['src'].endswith('.png') or img['src'].endswith('.jpg') or img['src'].endswith('.jpeg')):
             new['image'] = 'https://pleagueofficial.com' + img['src']
+        else:
+            new['image'] = 'https://pleagueofficial.com/upload/cover/photo_1_1613876068.jpg'
         news_more = dt.find('a', class_='news_more')
         if 'href' in news_more.attrs and news_more['href'].startswith('/news-detail'):
             new['link'] = 'https://pleagueofficial.com' + news_more['href']
