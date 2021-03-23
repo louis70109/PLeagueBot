@@ -502,7 +502,7 @@ def news_flex_template(news):
                 "contents": [
                     {
                         "type": "text",
-                        "text": "#點我分享",
+                        "text": "＃點我分享",
                         "align": "center",
                         "size": "xs",
                         "offsetTop": "3px",
