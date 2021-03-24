@@ -29,6 +29,8 @@ LINE_CHANNEL_SECRET=
 DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/postgres
 ```
 
+> You need to modify DATABASE_URL as your postgresql settings.
+
 ## LINE account (LINE_CHANNEL_ACCESS_TOKEN, LINE_CHANNEL_SECRET)
 
 - Got A LINE Bot API developer account
@@ -45,12 +47,17 @@ DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/postgres
 
 ## Local testing
 
-Run `Scripts/sync_to_sql.py` first, sync official website data to database as crawler.
+Run `Scripts/` profiles first, sync official website data to database as crawler.
 
 1. first terminal window
 
 ```
 cp .env.example .env
+
+# By docker (choose one)
+docker-compose up
+
+# By localized (choose one)
 pip install -r requirements.txt --user
 python api.py
 ```
