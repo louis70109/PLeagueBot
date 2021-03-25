@@ -3,6 +3,9 @@ from flask import request, render_template, Response
 from flask_restful import Resource
 
 from models.game import Game
+from models.news import News
+from models.shop import Shop
+from models.stream import Stream
 from utils.db import find_stream, find_news, find_shop
 from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template, add_me
 
@@ -38,15 +41,15 @@ class LiffController(Resource):
             )
         elif stream:
             alt = "分享一個 P+ 影片給你"
-            row = find_stream(stream)
-            content.append(stream_flex_template(row['id'], row['title'], row['image'], row['link']))
+            row = Stream.query.filter_by(id=stream).first()
+            content.append(stream_flex_template(row.id, row.title, row.image, row.link))
         elif news:
             alt = "我找到一篇 P+ 的新聞啦！！"
-            row = find_news(news)
+            row = News.query.filter_by(id=news).first()
             content.append(news_flex_template(row))
         elif shop:
             alt = "分享個 P+ 商品給你～"
-            row = find_shop(shop)
+            row = Shop.query.filter_by(id=shop).first()
             content.append(shop_flex_template(row))
         else:
             content = [add_me()]

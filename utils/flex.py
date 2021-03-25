@@ -4,6 +4,7 @@ from linebot.models import FlexSendMessage
 from sqlalchemy import text
 
 from models.game import Game
+from models.news import News
 from models.stream import Stream
 from utils.db import find_players_rank, find_newsies, find_shops
 
@@ -389,7 +390,7 @@ def rank_flex():
 
 
 def news_flex():
-    rows = find_newsies()
+    rows = News.query.order_by(text("date desc")).limit(12).all()
     content = []
     for row in rows:
         content.append(news_flex_template(row))
@@ -405,7 +406,7 @@ def news_flex_template(news):
             "layout": "vertical",
             "contents": [{
                 "type": "image",
-                "url": news['image'],
+                "url": news.image,
                 "size": "full",
                 "aspectMode": "cover",
                 "aspectRatio": "2:3",
@@ -418,7 +419,7 @@ def news_flex_template(news):
                     "layout": "vertical",
                     "contents": [{
                         "type": "text",
-                        "text": news['date'],
+                        "text": news.date,
                         "size": "xl",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -428,7 +429,7 @@ def news_flex_template(news):
                     "layout": "baseline",
                     "contents": [{
                         "type": "text",
-                        "text": news['description'],
+                        "text": news.description,
                         "color": "#ebebeb",
                         "size": "sm",
                         "flex": 0,
@@ -458,7 +459,7 @@ def news_flex_template(news):
                         "action": {
                             "type": "uri",
                             "label": "新聞",
-                            "uri": news['link']
+                            "uri": news.link
                         }
                     }, {
                         "type": "filler"
@@ -482,7 +483,7 @@ def news_flex_template(news):
                 "layout": "vertical",
                 "contents": [{
                     "type": "text",
-                    "text": news['tag'],
+                    "text": news.tag,
                     "color": "#ffffff",
                     "align": "center",
                     "size": "xs",
@@ -519,7 +520,7 @@ def news_flex_template(news):
                 "action": {
                     "type": "uri",
                     "label": "action",
-                    "uri": f"{SHARE_LINK}/?news={news.get('id')}"
+                    "uri": f"{SHARE_LINK}/?news={news.id}"
                 }
             }],
             "paddingAll": "0px"
@@ -543,7 +544,7 @@ def shop_flex_template(shop):
             "layout": "vertical",
             "contents": [{
                 "type": "image",
-                "url": shop['image'],
+                "url": shop.image,
                 "size": "full",
                 "aspectMode": "cover",
                 "aspectRatio": "2:2",
@@ -556,7 +557,7 @@ def shop_flex_template(shop):
                     "layout": "vertical",
                     "contents": [{
                         "type": "text",
-                        "text": shop['product'],
+                        "text": shop.product,
                         "size": "xl",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -566,7 +567,7 @@ def shop_flex_template(shop):
                     "layout": "baseline",
                     "contents": [{
                         "type": "text",
-                        "text": shop['price'],
+                        "text": shop.price,
                         "color": "#ebebeb",
                         "size": "sm",
                         "flex": 0,
@@ -596,7 +597,7 @@ def shop_flex_template(shop):
                         "action": {
                             "type": "uri",
                             "label": "物品",
-                            "uri": shop['link']
+                            "uri": shop.link
                         }
                     }, {
                         "type": "filler"
@@ -657,7 +658,7 @@ def shop_flex_template(shop):
                 "action": {
                     "type": "uri",
                     "label": "action",
-                    "uri": f"{SHARE_LINK}/?shop={shop.get('id')}"
+                    "uri": f"{SHARE_LINK}/?shop={shop.id}"
                 }
             }],
             "paddingAll": "0px"
