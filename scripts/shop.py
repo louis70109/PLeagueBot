@@ -107,8 +107,11 @@ def shop_crawler():
     for dt in soup.find_all(class_='card product-card'):
         shop: dict = {}
         img: element.Tag = dt.find('img')
-        if 'src' in img.attrs and (img['src'].endswith('.png') or img['src'].endswith('.jpg')):
+        if 'src' in img.attrs and (
+                img['src'].endswith('.png') or img['src'].endswith('.jpg') or img['src'].endswith('.jpeg')):
             shop['image']: str = 'https:' + img['src']
+        else:
+            shop['image'] = 'https://pleagueofficial.com/upload/cover/photo_1_1613876068.jpg'
 
         shop['product']: str = dt.find(class_='fs12 py-0 my-0 text-black').get_text()
         shop['price']: str = dt.find(class_='py-1 my-0 text-black fs18').get_text()
