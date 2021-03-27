@@ -5,8 +5,9 @@ from sqlalchemy import text
 
 from models.game import Game
 from models.news import News
+from models.shop import Shop
 from models.stream import Stream
-from utils.db import find_players_rank, find_newsies, find_shops
+from utils.db import find_players_rank, find_shops
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -84,9 +85,10 @@ def stream_flex_template(id, title, image, link):
     }
 
 
-def stream_flex():
+def stream_flex() -> list:
     content = []
-    for row in Stream.query.order_by(text("id desc")).limit(12).all():
+    rows: list[Stream] = Stream.query.order_by(text("stream.id desc")).limit(12).all()
+    for row in rows:
         content.append(stream_flex_template(row.id, row.title, row.image, row.link))
     return content
 
@@ -183,9 +185,10 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
     }
 
 
-def last_games_flex():
-    content = []
-    for row in Game.query.filter(Game.score != '0：0').order_by(text("id desc")).limit(12).all():
+def last_games_flex() -> list:
+    content: list = []
+    rows: list[Game] = Game.query.filter(Game.score != '0：0').order_by(text("game.id desc")).limit(12).all()
+    for row in rows:
         content.append(
             game_flex_template(
                 row.id,
@@ -529,7 +532,7 @@ def news_flex_template(news):
 
 
 def shop_flex() -> list:
-    rows = find_shops()
+    rows = Shop.query.limit(12).all()
     content = []
     for row in rows:
         content.append(shop_flex_template(row))

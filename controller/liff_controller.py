@@ -6,7 +6,7 @@ from models.game import Game
 from models.news import News
 from models.shop import Shop
 from models.stream import Stream
-from utils.db import find_stream, find_news, find_shop
+
 from utils.flex import game_flex_template, stream_flex_template, news_flex_template, shop_flex_template, add_me
 
 LIFF_ID = os.getenv('LIFF_SHARE_ID')
