@@ -9,7 +9,7 @@ import os
 
 from requests import models
 
-URL = urlparse.urlparse(os.getenv('DATABASE_URL'))
+URL = urlparse.urlparse(os.getenv('DATABASE_URI'))
 DB_NAME = URL.path[1:]
 USER = URL.username
 PASSWORD = URL.password

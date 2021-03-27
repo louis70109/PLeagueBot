@@ -8,7 +8,7 @@ import psycopg2.extras
 import urllib.parse as urlparse
 import os
 
-URL = urlparse.urlparse(os.getenv('DATABASE_URL'))
+URL = urlparse.urlparse(os.getenv('DATABASE_URI'))
 DB_NAME = URL.path[1:]
 USER = URL.username
 PASSWORD = URL.password
