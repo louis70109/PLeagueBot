@@ -5,9 +5,10 @@ from sqlalchemy import text
 
 from models.game import Game
 from models.news import News
+from models.player_rank import PlayerRank
 from models.shop import Shop
 from models.stream import Stream
-from utils.db import find_players_rank, find_shops
+from utils.db import find_players_rank
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -289,19 +290,19 @@ def player_rank_flex_template(rows):
     }
     content, rank_name = [], ''
     for row in rows:
-        rank_name = row.get('rank_name')
+        rank_name = row.rank_name
         content.append({
             "type": "box",
             "layout": "horizontal",
             "contents": [{
                 "type": "text",
-                "text": row.get('player'),
+                "text": row.player,
                 "size": "lg",
                 "color": "#555555",
                 "flex": 0
             }, {
                 "type": "text",
-                "text": row.get('average'),
+                "text": row.average,
                 "size": "sm",
                 "color": "#111111",
                 "align": "end"
@@ -312,7 +313,7 @@ def player_rank_flex_template(rows):
             "layout": "vertical",
             "contents": [{
                 "type": "text",
-                "text": row.get('team'),
+                "text": row.team,
                 "size": "xxs",
                 "color": "#aaaaaa",
                 "wrap": True,
@@ -379,7 +380,7 @@ def mapping_rank_name(rows):
     ranking, content = [], []
     for name in mapping:
         for row in rows:
-            if row.get('rank_name') == name:
+            if row.rank_name == name:
                 ranking.append(row)
         content.append(player_rank_flex_template(ranking))
         ranking = []
@@ -387,8 +388,7 @@ def mapping_rank_name(rows):
 
 
 def rank_flex():
-    rows = find_players_rank()
-
+    rows = PlayerRank.query.all()
     return mapping_rank_name(rows)
 
 
