@@ -49,6 +49,7 @@ def db_table_check():
             cur.execute(f'''
                 CREATE TABLE public.player_rank
                 (
+                    id serial NOT NULL PRIMARY KEY,
                     player character varying(10) COLLATE pg_catalog."default",
                     team character varying(10) COLLATE pg_catalog."default",
                     average character varying(10) COLLATE pg_catalog."default",
