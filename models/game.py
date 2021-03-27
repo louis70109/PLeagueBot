@@ -23,7 +23,7 @@ class Game(db.Model):
                f"guest_image={self.customer_image}, main={self.main}, " \
                f"main_image={self.main_image}, score={self.score}, " \
                f"people={self.people}, place={self.place}, " \
-               f"event_date={self.event_date}>"
+               f"event_date={self.event_date})>"
 
     def __init__(self, id, customer, customer_image, main, main_image, score, people, place, event_date, **kwargs):
         super(Game, self).__init__(**kwargs)

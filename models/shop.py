@@ -17,7 +17,7 @@ class Shop(db.Model):
     def __repr__(self):
         return f"<Stream (id={self.id}, link={self.link}, " \
                f"image={self.image}, product={self.product}, " \
-               f"price={self.price}>"
+               f"price={self.price})>"
 
     def __init__(self, id, link, image, product, price, **kwargs):
         super(Shop, self).__init__(**kwargs)

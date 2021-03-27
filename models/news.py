@@ -18,7 +18,7 @@ class News(db.Model):
     def __repr__(self):
         return f"<Stream (id={self.id}, link={self.link}, " \
                f"image={self.image}, date={self.date}, " \
-               f"tag={self.tag}, description={self.description}>"
+               f"tag={self.tag}, description={self.description})>"
 
     def __init__(self, id, link, image, date, tag, description, **kwargs):
         super(News, self).__init__(**kwargs)

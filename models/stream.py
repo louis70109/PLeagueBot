@@ -17,7 +17,7 @@ class Stream(db.Model):
     def __repr__(self):
         return f"<Stream (id={self.id}, link={self.link}, " \
                f"image={self.image}, tile={self.tile}, " \
-               f"is_live={self.is_live}>"
+               f"is_live={self.is_live})>"
 
     def __init__(self, id, link, image, tile, is_live, **kwargs):
         super(Stream, self).__init__(**kwargs)
