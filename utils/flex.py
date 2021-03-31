@@ -8,7 +8,6 @@ from models.news import News
 from models.player_rank import PlayerRank
 from models.shop import Shop
 from models.stream import Stream
-from utils.db import find_players_rank
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
@@ -202,9 +201,10 @@ def last_games_flex() -> list:
     return content
 
 
-def next_games_flex():
-    content = []
-    for row in Game.query.filter_by(score='0：0').order_by(text("id asc")).limit(12).all():
+def next_games_flex() -> list:
+    content: list = []
+    rows: list[Game] = Game.query.filter_by(score='0：0').order_by(text("id asc")).limit(12).all()
+    for row in rows:
         content.append(
             game_flex_template(
                 row.id,
