@@ -19,3 +19,4 @@ var/
 .vscode/
 .idea/*
 .DS_Store
+.tox/
