@@ -7,7 +7,8 @@ stream_seq = Sequence('stream_id_seq')
 
 class Stream(db.Model):
     __tablename__ = 'stream'
-    id = db.Column(db.Integer, stream_seq, primary_key=True, server_default=stream_seq.next_value())
+    id = db.Column(db.Integer, stream_seq, primary_key=True,
+                   server_default=stream_seq.next_value())
     link = db.Column(db.String(255))
     image = db.Column(db.String(255))
     title = db.Column(db.String(100))

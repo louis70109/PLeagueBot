@@ -107,7 +107,8 @@ def ranking_list(soup):
     }
 
     for dt in soup.find_all(class_='table-responsive fs14'):
-        data_list = dt.find(class_='text-md-left text-center fs14 text_strong pl-md-3 pl-0').get_text()
+        data_list = dt.find(
+            class_='text-md-left text-center fs14 text_strong pl-md-3 pl-0').get_text()
         ranking = player_ranking(dt)
         if re.search('(\s+)?得分(\s+)?', data_list):
             rank['scores'] = ranking
@@ -197,8 +198,8 @@ def full_ranking():
     db_table_check()
     print("Check DB Done")
     res = requests.get('https://pleagueofficial.com/stat_ranking', headers={
-            'User-Agent': 'Firefox browser\'s user-agent',
-        })
+        'User-Agent': 'Firefox browser\'s user-agent',
+    })
     soup = BeautifulSoup(res.content, 'html.parser')
     time.sleep(1)
     print('Load games ranking...')

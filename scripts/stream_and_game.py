@@ -77,14 +77,18 @@ def db_table_check():
 
 
 def stream_parser():
-    yt = requests.get('https://www.youtube.com/c/PLEAGUEofficial/videos?view=2&sort=dd&live_view=502&shelf_id=2')
+    yt = requests.get(
+        'https://www.youtube.com/c/PLEAGUEofficial/videos?view=2&sort=dd&live_view=502&shelf_id=2')
     message = BeautifulSoup(yt.content, 'html.parser')
     video_scripts = message.find_all('script')
     bs_to_string = str(video_scripts[32])
     variable_string = bs_to_string.split('var ytInitialData = ')[1].split(';')[0]
     variable_dict = json.loads(variable_string)
-    clean_list = variable_dict["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"]["content"][
-        "sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0]["gridRenderer"]["items"]
+    clean_list = \
+    variable_dict["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"][
+        "content"][
+        "sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0][
+        "gridRenderer"]["items"]
     streams = []
     for data in clean_list:
         if data.get("gridVideoRenderer") is None:
@@ -92,7 +96,8 @@ def stream_parser():
         image = data["gridVideoRenderer"]["thumbnail"]['thumbnails'][3]["url"].split('?sqp')[0]
         title = data["gridVideoRenderer"]["title"]["runs"][0]["text"]
         link_path = "https://www.youtube.com/" + \
-                    data["gridVideoRenderer"]["navigationEndpoint"]["commandMetadata"]["webCommandMetadata"]["url"]
+                    data["gridVideoRenderer"]["navigationEndpoint"]["commandMetadata"][
+                        "webCommandMetadata"]["url"]
         streams.append({'title': title, 'link': link_path, 'image': image})
 
     return streams
@@ -130,7 +135,8 @@ def all_game():
             date.append(dt.get_text())
         for wk in soup.find_all(class_='fs12 mb-2'):
             week.append(wk.get_text())
-        for t in soup.select('.col-lg-1.col-12.text-center.align-self-center.match_row_datetime > h6[class~=fs12]'):
+        for t in soup.select(
+                '.col-lg-1.col-12.text-center.align-self-center.match_row_datetime > h6[class~=fs12]'):
             time.append(t.get_text())
     except Exception as e:
         lotify.send_message(access_token=notify, message=f'比賽資訊網站格式錯誤 \n{e}')
@@ -143,7 +149,8 @@ def all_game():
         teams.append(team.get_text())
     for img in soup.find_all('img', {'class': 'w105'}):  # 2 to be a play
         if 'src' in img.attrs:
-            if img['src'].startswith('https://pleagueofficial.com/') and img['src'].endswith('.png'):
+            if img['src'].startswith('https://pleagueofficial.com/') and img['src'].endswith(
+                    '.png'):
                 images.append(img['src'])
     for score in soup.find_all('h6', {'class': 'PC_only fs22'}):
         scores.append(score.get_text())

@@ -108,7 +108,8 @@ def news_crawler():
         new: dict = {}
         img = dt.find('img')
         if 'src' in img.attrs and (
-                img['src'].endswith('.png') or img['src'].endswith('.jpg') or img['src'].endswith('.jpeg')):
+                img['src'].endswith('.png') or img['src'].endswith('.jpg') or img['src'].endswith(
+            '.jpeg')):
             new['image'] = 'https://pleagueofficial.com' + img['src']
         else:
             new['image'] = 'https://pleagueofficial.com/upload/cover/photo_1_1613876068.jpg'
