@@ -3,7 +3,7 @@ import unittest
 import responses
 from _pytest.monkeypatch import MonkeyPatch
 
-from utils.flex import flex_message_type_condition, stream_flex_template, SHARE_ID
+from utils.flex import flex_message_type_condition, stream_flex_template
 
 
 class BufferedIOBase:
