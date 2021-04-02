@@ -187,8 +187,8 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
 
 def last_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(Game.score != '0：0').order_by(text("game.id desc")).limit(
-        12).all()
+    rows: list[Game] = Game.query.filter(
+        Game.score != '0：0').order_by(text("game.id desc")).limit(12).all()
     for row in rows:
         content.append(
             game_flex_template(
