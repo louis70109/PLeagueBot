@@ -321,7 +321,6 @@ def player_rank_flex_template(rows):
                 "gravity": "top"
             }]
         })
-
     return {
         "type": "bubble",
         "body": {
@@ -335,7 +334,7 @@ def player_rank_flex_template(rows):
                 "size": "sm"
             }, {
                 "type": "text",
-                "text": mapping[rank_name],
+                "text": rank_name if mapping.get(rank_name) else 'Undefined',
                 "weight": "bold",
                 "size": "xxl",
                 "margin": "md"

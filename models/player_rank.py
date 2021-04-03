@@ -14,7 +14,7 @@ class PlayerRank(db.Model):
     rank_name = db.Column(db.String(10))
 
     def __repr__(self):
-        return f"<PlayerRand (id={self.id}, " \
+        return f"<PlayerRank (id={self.id}, " \
                f"player={self.player}, team={self.team}, average={self.average}, " \
                f"rank_name={self.rank_name})>"
 
