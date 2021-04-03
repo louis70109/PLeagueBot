@@ -4,9 +4,10 @@ from _pytest.monkeypatch import MonkeyPatch
 from mock import patch
 
 from models.game import Game
+from models.player_rank import PlayerRank
 from models.stream import Stream
 from utils.flex import flex_message_type_condition, stream_flex_template, stream_flex, \
-    game_flex_template, last_games_flex
+    game_flex_template, last_games_flex, next_games_flex, help_flex, rank_flex
 
 
 class TestClient(unittest.TestCase):
@@ -205,6 +206,111 @@ class TestClient(unittest.TestCase):
                      'action': {'type': 'uri', 'label': '分享',
                                 'uri': 'https://liff.line.me/TEST_ID/?game=1'}}],
                 'flex': 0}}]
+
+        mock_query.ssert_called_once()
+        self.assertEqual(result, expected)
+        self.assertEqual(list, type(expected))
+
+    @patch('utils.flex.Game')
+    def test_next_games_flex(self, mock_query):
+        mock_query.query.filter_by.return_value.order_by.return_value \
+            .limit.return_value.all.return_value = [
+            Game(id=1, customer='Nijia team', customer_image='https://link',
+                 main='台中就是隊', main_image='https://image', score='100：99',
+                 people='1000/1000', place='台灣', event_date='3/10 禮拜日')]
+
+        result = next_games_flex()
+        expected = [{
+            'type': 'bubble', 'header': {'type': 'box', 'layout': 'horizontal',
+                                         'contents': [
+                                             {'type': 'image', 'url': 'https://link'},
+                                             {'type': 'text', 'text': 'ＶＳ',
+                                              'gravity': 'center', 'align': 'center',
+                                              'size': 'xxl', 'weight': 'bold'},
+                                             {'type': 'image', 'url': 'https://image'}]},
+            'hero': {'type': 'box', 'layout': 'vertical', 'contents': [
+                {'type': 'text', 'text': '100：99', 'align': 'center', 'gravity': 'center',
+                 'size': 'xxl', 'weight': 'bold'},
+                {'type': 'text', 'text': '現場 1000/1000 入場', 'gravity': 'center',
+                 'align': 'center', 'size': 'md', 'margin': 'md'}]},
+            'body': {'type': 'box', 'layout': 'vertical', 'contents': [
+                {'type': 'text', 'text': '台灣', 'weight': 'bold', 'size': 'xl',
+                 'gravity': 'center', 'align': 'center'},
+                {'type': 'text', 'text': '3/10 禮拜日', 'align': 'center', 'size': 'md',
+                 'margin': 'md'}]},
+            'footer': {
+                'type': 'box', 'layout': 'horizontal', 'spacing': 'sm',
+                'contents': [{
+                    'type': 'button',
+                    'action': {'type': 'uri', 'label': '官方網站',
+                               'uri': 'https://pleagueofficial.com/schedule-regular-season'},
+                    'style': 'link'},
+                    {'type': 'button', 'style': 'link', 'height': 'sm',
+                     'action': {'type': 'uri', 'label': '分享',
+                                'uri': 'https://liff.line.me/TEST_ID/?game=1'}}],
+                'flex': 0}}]
+
+        mock_query.ssert_called_once()
+        self.assertEqual(result, expected)
+        self.assertEqual(list, type(expected))
+
+    def test_help_flex(self):
+        result = help_flex()
+        expected = {
+            'type': 'carousel', 'contents': [{
+                'type': 'bubble',
+                'body': {'type': 'box', 'layout': 'vertical',
+                         'contents': [{'type': 'button',
+                                       'action': {
+                                           'type': 'message',
+                                           'label': '最新影片',
+                                           'text': '最新影片'}},
+                                      {'type': 'button',
+                                       'action': {
+                                           'type': 'message',
+                                           'label': '歷史例行賽賽程',
+                                           'text': '歷史例行賽賽程'}},
+                                      {'type': 'button',
+                                       'action': {
+                                           'type': 'message',
+                                           'label': '例行賽剩餘賽程',
+                                           'text': '例行賽剩餘賽程'}},
+                                      {'type': 'button',
+                                       'action': {
+                                           'type': 'message',
+                                           'label': '球員數據排行榜',
+                                           'text': '球員數據排行榜'}},
+                                      {'type': 'button',
+                                       'action': {
+                                           'type': 'message',
+                                           'label': '新聞',
+                                           'text': '最新新聞'}},
+                                      {'type': 'button',
+                                       'action': {
+                                           'type': 'message',
+                                           'label': '購物商城',
+                                           'text': '商品'}}]}}]}
+
+        self.assertEqual(result, expected)
+        self.assertEqual(dict, type(expected))
+
+    @patch('utils.flex.PlayerRank')
+    def test_rank_flex(self, mock_query):
+        mock_query.query.all.return_value = [
+            PlayerRank(id=1, player='nijia', team='line', average='25.5', rank_name='scores'),
+            PlayerRank(id=1, player='nijia', team='line', average='10.5', rank_name='rebounds'),
+            PlayerRank(id=1, player='nijia', team='line', average='5.5', rank_name='assists'),
+            PlayerRank(id=1, player='nijia', team='line', average='2.5', rank_name='steals'),
+            PlayerRank(id=1, player='nijia', team='line', average='5.5', rank_name='blocks'),
+            PlayerRank(id=1, player='nijia', team='line', average='50%', rank_name='two'),
+            PlayerRank(id=1, player='nijia', team='line', average='30%', rank_name='three'),
+            PlayerRank(id=1, player='nijia', team='line', average='50%', rank_name='freethrow')
+        ]
+
+        result = rank_flex()
+        f = open('rank_flex.json')
+        expected = json.load(f)
+        f.close()
 
         mock_query.ssert_called_once()
         self.assertEqual(result, expected)
