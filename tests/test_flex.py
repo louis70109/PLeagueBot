@@ -1,4 +1,5 @@
 import json
+import os
 import unittest
 from _pytest.monkeypatch import MonkeyPatch
 from mock import patch
@@ -308,7 +309,7 @@ class TestClient(unittest.TestCase):
         ]
 
         result = rank_flex()
-        f = open('rank_flex.json')
+        f = open(os.path.abspath(os.path.dirname(__file__))+'/tests/rank_flex.json')
         expected = json.load(f)
         f.close()
 
