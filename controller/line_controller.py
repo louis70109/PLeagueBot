@@ -57,6 +57,21 @@ class LineController(Resource):
             alt = '歷史例行賽賽程'
         elif text == '例行賽剩餘賽程':
             flex = next_games_flex()
+            if not flex:
+                flex = {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "目前例行賽程結束囉🏀"
+                            }
+                        ]
+                    }
+                }
+
             alt = '例行賽剩餘賽程'
         elif text == '球員數據排行榜':
             flex = rank_flex()
