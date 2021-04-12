@@ -177,36 +177,9 @@ class TestClient(unittest.TestCase):
                  people='1000/1000', place='台灣', event_date='3/10 禮拜日')]
 
         result = last_games_flex()
-        expected = [{
-            'type': 'bubble', 'header': {
-                'type': 'box', 'layout': 'horizontal',
-                'contents': [
-                    {'type': 'image', 'url': 'https://link'},
-                    {'type': 'text', 'text': 'ＶＳ',
-                     'gravity': 'center', 'align': 'center',
-                     'size': 'xxl', 'weight': 'bold'},
-                    {'type': 'image', 'url': 'https://image'}]},
-            'hero': {'type': 'box', 'layout': 'vertical', 'contents': [
-                {'type': 'text', 'text': '100：99', 'align': 'center', 'gravity': 'center',
-                 'size': 'xxl', 'weight': 'bold'},
-                {'type': 'text', 'text': '現場 1000/1000 入場', 'gravity': 'center',
-                 'align': 'center', 'size': 'md', 'margin': 'md'}]},
-            'body': {'type': 'box', 'layout': 'vertical', 'contents': [
-                {'type': 'text', 'text': '台灣', 'weight': 'bold', 'size': 'xl',
-                 'gravity': 'center', 'align': 'center'},
-                {'type': 'text', 'text': '3/10 禮拜日', 'align': 'center', 'size': 'md',
-                 'margin': 'md'}]},
-            'footer': {
-                'type': 'box', 'layout': 'horizontal', 'spacing': 'sm',
-                'contents': [{
-                    'type': 'button',
-                    'action': {'type': 'uri', 'label': '官方網站',
-                               'uri': 'https://pleagueofficial.com/schedule-regular-season'},
-                    'style': 'link'},
-                    {'type': 'button', 'style': 'link', 'height': 'sm',
-                     'action': {'type': 'uri', 'label': '分享',
-                                'uri': 'https://liff.line.me/TEST_ID/?game=1'}}],
-                'flex': 0}}]
+        f = open(os.path.abspath(os.path.dirname(__file__)) + '/last_games_flex.json')
+        expected = json.load(f)
+        f.close()
 
         mock_query.ssert_called_once()
         self.assertEqual(result, expected)
