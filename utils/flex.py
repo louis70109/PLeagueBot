@@ -334,7 +334,7 @@ def player_rank_flex_template(rows):
                 "size": "sm"
             }, {
                 "type": "text",
-                "text": mapping.get(rank_name) if mapping.get(rank_name) else 'Undefined',
+                "text": mapping[rank_name] if mapping[rank_name] else 'Undefined',
                 "weight": "bold",
                 "size": "xxl",
                 "margin": "md"
