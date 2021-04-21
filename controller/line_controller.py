@@ -9,7 +9,7 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction, URIAction
 
-from utils.flex import stream_flex, last_games_flex, next_games_flex, help_flex, rank_flex, \
+from utils.flex import stream_flex, schedule_last_games_flex, schedule_next_games_flex, help_flex, rank_flex, \
     news_flex, shop_flex, \
     flex_message_type_condition
 
@@ -53,10 +53,10 @@ class LineController(Resource):
             flex = stream_flex()
             alt = '最新影片'
         elif text == '歷史例行賽賽程':
-            flex = last_games_flex()
+            flex = schedule_last_games_flex()
             alt = '歷史例行賽賽程'
         elif text == '例行賽剩餘賽程':
-            flex = next_games_flex()
+            flex = schedule_next_games_flex()
             if not flex:
                 flex = {
                     "type": "bubble",

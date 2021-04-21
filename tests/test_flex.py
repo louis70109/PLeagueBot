@@ -8,7 +8,7 @@ from models.game import Game
 from models.player_rank import PlayerRank
 from models.stream import Stream
 from utils.flex import flex_message_type_condition, stream_flex_template, stream_flex, \
-    game_flex_template, last_games_flex, next_games_flex, help_flex, rank_flex
+    game_flex_template, schedule_last_games_flex, schedule_next_games_flex, help_flex, rank_flex
 
 
 class TestClient(unittest.TestCase):
@@ -169,15 +169,15 @@ class TestClient(unittest.TestCase):
         self.assertEqual(result, expected)
 
     @patch('utils.flex.Game')
-    def test_last_games_flex(self, mock_query):
+    def test_schedule_last_games_flex(self, mock_query):
         mock_query.query.filter.return_value.order_by.return_value \
             .limit.return_value.all.return_value = [
             Game(id=1, customer='Nijia team', customer_image='https://link',
                  main='台中就是隊', main_image='https://image', score='100：99',
                  people='1000/1000', place='台灣', event_date='3/10 禮拜日')]
 
-        result = last_games_flex()
-        f = open(os.path.abspath(os.path.dirname(__file__)) + '/last_games_flex.json')
+        result = schedule_last_games_flex()
+        f = open(os.path.abspath(os.path.dirname(__file__)) + '/schedule_last_games_flex.json')
         expected = json.load(f)
         f.close()
 
@@ -186,14 +186,14 @@ class TestClient(unittest.TestCase):
         self.assertEqual(list, type(expected))
 
     @patch('utils.flex.Game')
-    def test_next_games_flex(self, mock_query):
+    def test_schedule_next_games_flex(self, mock_query):
         mock_query.query.filter_by.return_value.order_by.return_value \
             .limit.return_value.all.return_value = [
             Game(id=1, customer='Nijia team', customer_image='https://link',
                  main='台中就是隊', main_image='https://image', score='100：99',
                  people='1000/1000', place='台灣', event_date='3/10 禮拜日')]
 
-        result = next_games_flex()
+        result = schedule_next_games_flex()
         expected = [{
             'type': 'bubble', 'header': {'type': 'box', 'layout': 'horizontal',
                                          'contents': [
