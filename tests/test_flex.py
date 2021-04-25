@@ -174,10 +174,10 @@ class TestClient(unittest.TestCase):
             .limit.return_value.all.return_value = [
             Game(id=1, customer='Nijia team', customer_image='https://link',
                  main='台中就是隊', main_image='https://image', score='100：99',
-                 people='1000/1000', place='台灣', event_date='3/10 禮拜日')]
+                 people='1000/1000', place='台灣', event_date='3/10 禮拜日', season='playoff')]
 
         result = regular_last_games_flex()
-        f = open(os.path.abspath(os.path.dirname(__file__)) + '/regular_last_games_flex.json')
+        f = open(os.path.abspath(os.path.dirname(__file__)) + '/last_games_flex.json')
         expected = json.load(f)
         f.close()
 
@@ -191,7 +191,7 @@ class TestClient(unittest.TestCase):
             .limit.return_value.all.return_value = [
             Game(id=1, customer='Nijia team', customer_image='https://link',
                  main='台中就是隊', main_image='https://image', score='100：99',
-                 people='1000/1000', place='台灣', event_date='3/10 禮拜日')]
+                 people='1000/1000', place='台灣', event_date='3/10 禮拜日', season='final')]
 
         result = regular_next_games_flex()
         expected = [{
