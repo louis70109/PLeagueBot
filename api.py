@@ -3,6 +3,7 @@ import traceback
 
 from flask import Flask, request
 from flask_cors import CORS
+from flask_migrate import Migrate
 from flask_restful import Api
 from lotify.client import Client
 
@@ -22,6 +23,7 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
+migrate = Migrate(app, db)
 with app.app_context():
     db.create_all()
 
