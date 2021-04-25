@@ -193,7 +193,7 @@ def arrange_lists_to_one(
     return games
 
 
-def insert_or_update_to_game(games: list[list]):
+def insert_or_update_to_game(games: list):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         for game in games:
