@@ -85,10 +85,10 @@ def stream_parser():
     variable_string = bs_to_string.split('var ytInitialData = ')[1].split(';')[0]
     variable_dict = json.loads(variable_string)
     clean_list = \
-    variable_dict["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"][
-        "content"][
-        "sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0][
-        "gridRenderer"]["items"]
+        variable_dict["contents"]["twoColumnBrowseResultsRenderer"]["tabs"][1]["tabRenderer"][
+            "content"][
+            "sectionListRenderer"]["contents"][0]["itemSectionRenderer"]["contents"][0][
+            "gridRenderer"]["items"]
     streams = []
     for data in clean_list:
         if data.get("gridVideoRenderer") is None:
@@ -123,10 +123,10 @@ def insert_or_update_to_stream(streams):
         conn.commit()
 
 
-def all_game():
+def all_game(season):
     schedule = requests.get(
-        'https://pleagueofficial.com/schedule-regular-season', headers={
-            'User-Agent': 'Google browser\'s user-agent',
+        f'https://pleagueofficial.com/schedule-{season}', headers={
+            'User-Agent': f'Google browsers {season}',
         })
     soup = BeautifulSoup(schedule.content, 'html.parser')
     date, week, time, teams, images, scores, places, people = [], [], [], [], [], [], [], []
@@ -149,9 +149,15 @@ def all_game():
         teams.append(team.get_text())
     for img in soup.find_all('img', {'class': 'w105'}):  # 2 to be a play
         if 'src' in img.attrs:
-            if img['src'].startswith('https://pleagueofficial.com/') and img['src'].endswith(
-                    '.png'):
-                images.append(img['src'])
+            team_not_sure = img['src'].startswith('//pleagueofficial.com/upload/')
+            if (img['src'].startswith('https://pleagueofficial.com/') or team_not_sure)\
+                    and img['src'].endswith('.png'):
+                if team_not_sure:
+                    images.append(f"https:{img['src']}")
+                else:
+                    images.append(img['src'])
+            else:
+                images.append('https://pleagueofficial.com/upload/p_team/logo_1_1605758005.png')
     for score in soup.find_all('h6', {'class': 'PC_only fs22'}):
         scores.append(score.get_text())
     for place in soup.find_all('h5', {'class': 'fs12 mb-0'}):
@@ -161,7 +167,11 @@ def all_game():
     return event_date, teams, scores, places, people, images
 
 
-def arrange_lists_to_one(event, teams, scores, places, people, images) -> list:
+def arrange_lists_to_one(
+        event=None, teams=None,
+        scores=None, places=None,
+        people=None, images=None,
+        season=None) -> list:
     games = []
     length = len(event)
     index, index2 = 0, 0
@@ -174,34 +184,37 @@ def arrange_lists_to_one(event, teams, scores, places, people, images) -> list:
             'main_image': images[index2 + 1],
             'people': people[index],
             'place': places[index],
-            'score': f'{scores[index2]}：{scores[index2 + 1]}'
+            'score': f'{scores[index2]}：{scores[index2 + 1]}',
+            'season': season
         })
         index += 1
         index2 += 2
+
     return games
 
 
-def insert_or_update_to_game(games: list):
+def insert_or_update_to_game(games: list[list]):
     with Database() as db, db.connect() as conn, conn.cursor(
             cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         for game in games:
             cur.execute(f'''
-                INSERT INTO game (customer, customer_image, main, main_image, score, people, place, event_date)
+                INSERT INTO game (customer, customer_image, main, main_image, score, people, place, event_date, season)
                     VALUES (
-                    '{game.get('customer')}', 
-                    '{game.get('customer_image')}', 
-                    '{game.get('main')}', 
-                    '{game.get('main_image')}', 
-                    '{game.get('score')}', 
-                    '{game.get('people')}', 
-                    '{game.get('place')}',
-                    '{game.get('event_date')}'
+                    '{game['customer']}', 
+                    '{game['customer_image']}', 
+                    '{game['main']}', 
+                    '{game['main_image']}', 
+                    '{game['score']}', 
+                    '{game['people']}', 
+                    '{game['place']}',
+                    '{game['event_date']}',
+                    '{game['season']}'
                 ) ON CONFLICT ON CONSTRAINT game_unique
                 DO UPDATE SET
-                score = '{game.get('score')}',
-                place = '{game.get('place')}',
-                people = '{game.get('people')}',
-                event_date = '{game.get('event_date')}'
+                score      = '{game['score']}',
+                place      = '{game['place']}',
+                people     = '{game['people']}',
+                event_date = '{game['event_date']}'
             ''')
         conn.commit()
 
@@ -230,18 +243,31 @@ def main():
             access_token=notify,
             message=f'影片檔案資訊無法進入 db\n陣列: {str(streams)}')
     print('Sync games...')
-    event_date, teams, scores, places, people, images = all_game()
-    print('Sync game data to database...')
-    games: list = arrange_lists_to_one(event_date, teams, scores, places, people, images)
-    print('Game arrange done.')
-    time.sleep(2)
+
+    # Add different season data to SQL
+    seasons = [
+        'pre-season', 'regular-season',
+        'playoffs', 'finals'
+    ]
+    total_game: list = []
+    for season in seasons:
+        event_date, teams, scores, places, people, images = all_game(season)
+
+        print('Arrange data to list...')
+        games = arrange_lists_to_one(event_date, teams,
+                                     scores, places,
+                                     people, images,
+                                     season)
+        for game in games:
+            total_game.append(game)
+        print('Game arrange done.')
     print('Ready to insert games.')
     try:
-        insert_or_update_to_game(games)
+        insert_or_update_to_game(total_game)
     except Exception:
         lotify.send_message(
             access_token=notify,
-            message=f'比賽資訊無法進入 db\n陣列: {str(games)}')
+            message=f'比賽資訊無法進入 db\n陣列: {str(total_game)}')
     print('Insert games done.')
 
 
