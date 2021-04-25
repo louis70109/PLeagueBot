@@ -76,10 +76,10 @@ class LineController(Resource):
 
             alt = '例行賽剩餘賽程'
 
-        elif text == '過往季後賽':
+        elif text == '歷史季後賽賽程':
             flex = playoffs_last_games_flex()
-            alt = '過往季後賽賽程'
-        elif text == '當前季後賽':
+            alt = '歷史季後賽賽程'
+        elif text == '當前季後賽賽程':
             flex = playoffs_next_games_flex()
             if not flex:
                 flex = {
