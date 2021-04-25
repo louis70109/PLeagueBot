@@ -16,18 +16,19 @@ class Game(db.Model):
     people = db.Column(db.String(15))
     place = db.Column(db.String(20))
     event_date = db.Column(db.String(30))
+    season = db.Column(db.String(20))
     __table_args__ = (
-    db.UniqueConstraint('customer', 'main', 'place', 'event_date', name='game_unique'),)
+        db.UniqueConstraint('customer', 'main', 'place', 'event_date', name='game_unique'),)
 
     def __repr__(self):
         return f"<Game (id={self.id}, guest={self.customer}, " \
                f"guest_image={self.customer_image}, main={self.main}, " \
                f"main_image={self.main_image}, score={self.score}, " \
                f"people={self.people}, place={self.place}, " \
-               f"event_date={self.event_date})>"
+               f"event_date={self.event_date}, season={self.season})>"
 
     def __init__(self, id, customer, customer_image, main, main_image, score, people, place,
-                 event_date, **kwargs):
+                 event_date, season, **kwargs):
         super(Game, self).__init__(**kwargs)
         self.id = id
         self.customer = customer
@@ -38,3 +39,4 @@ class Game(db.Model):
         self.people = people
         self.place = place
         self.event_date = event_date
+        self.season = season

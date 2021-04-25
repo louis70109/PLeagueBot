@@ -142,7 +142,7 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
             "layout": "vertical",
             "contents": [{
                 "type": "text",
-                "text": f"{location}",
+                "text": f"{location if location else '尚未出爐'}",
                 "weight": "bold",
                 "size": "xl",
                 "gravity": "center",
@@ -185,10 +185,12 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
     }
 
 
-def schedule_last_games_flex() -> list:
+def regular_last_games_flex() -> list:
     content: list = []
     rows: list[Game] = Game.query.filter(
-        Game.score != '0：0').order_by(text("game.id desc")).limit(12).all()
+        Game.score != '0：0' and Game.season == 'regular-season'). \
+        order_by(text("game.id desc")).limit(12).all()
+
     for row in rows:
         content.append(
             game_flex_template(
@@ -202,9 +204,63 @@ def schedule_last_games_flex() -> list:
     return content
 
 
-def schedule_next_games_flex() -> list:
+def regular_next_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter_by(score='0：0').order_by(text("id asc")).limit(12).all()
+    rows: list[Game] = Game.query.filter_by(score='0：0', season='regular-season'). \
+        order_by(text("id asc")).limit(12).all()
+    for row in rows:
+        content.append(
+            game_flex_template(
+                row.id,
+                row.customer_image,
+                row.main_image,
+                row.score,
+                row.people,
+                row.place,
+                row.event_date))
+    return content
+
+
+def playoffs_last_games_flex() -> list:
+    content: list = []
+    rows: list[Game] = Game.query.filter(
+        Game.score != '0：0', Game.season == 'playoffs'). \
+        order_by(text("game.id desc")).limit(12).all()
+
+    for row in rows:
+        content.append(
+            game_flex_template(
+                row.id,
+                row.customer_image,
+                row.main_image,
+                row.score,
+                row.people,
+                row.place,
+                row.event_date))
+    return content
+
+
+def playoffs_next_games_flex() -> list:
+    content: list = []
+    rows: list[Game] = Game.query.filter(Game.score == '0：0', Game.season == 'playoffs'). \
+        order_by(text("id asc")).limit(12).all()
+    for row in rows:
+        content.append(
+            game_flex_template(
+                row.id,
+                row.customer_image,
+                row.main_image,
+                row.score,
+                row.people,
+                row.place,
+                row.event_date))
+    return content
+
+
+def final_games_flex() -> list:
+    content: list = []
+    rows: list[Game] = Game.query.filter(Game.season == 'finals'). \
+        order_by(text("id asc")).limit(12).all()
     for row in rows:
         content.append(
             game_flex_template(
