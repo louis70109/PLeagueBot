@@ -9,9 +9,11 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction, URIAction
 
-from utils.flex import stream_flex, schedule_last_games_flex, schedule_next_games_flex, help_flex, rank_flex, \
+from utils.flex import stream_flex, regular_last_games_flex, regular_next_games_flex, help_flex, \
+    rank_flex, \
     news_flex, shop_flex, \
-    flex_message_type_condition
+    flex_message_type_condition, playoffs_last_games_flex, playoffs_next_games_flex, \
+    final_games_flex
 
 line_bot_api = LineBotApi(os.getenv('LINE_CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('LINE_CHANNEL_SECRET'))
@@ -53,10 +55,10 @@ class LineController(Resource):
             flex = stream_flex()
             alt = '最新影片'
         elif text == '歷史例行賽賽程':
-            flex = schedule_last_games_flex()
+            flex = regular_last_games_flex()
             alt = '歷史例行賽賽程'
         elif text == '例行賽剩餘賽程':
-            flex = schedule_next_games_flex()
+            flex = regular_next_games_flex()
             if not flex:
                 flex = {
                     "type": "bubble",
@@ -73,6 +75,46 @@ class LineController(Resource):
                 }
 
             alt = '例行賽剩餘賽程'
+
+        elif text == '過往季後賽':
+            flex = playoffs_last_games_flex()
+            alt = '過往季後賽賽程'
+        elif text == '當前季後賽':
+            flex = playoffs_next_games_flex()
+            if not flex:
+                flex = {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "目前季後賽賽程結束囉🏀"
+                            }
+                        ]
+                    }
+                }
+
+            alt = '季後賽剩餘賽程'
+        elif text == 'final':
+            flex = final_games_flex()
+            if not flex:
+                flex = {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "text",
+                                "text": "目前尚未有總決賽喔🏀"
+                            }
+                        ]
+                    }
+                }
+
+            alt = '總決賽賽程'
         elif text == '球員數據排行榜':
             flex = rank_flex()
             alt = '球員數據排行榜'
