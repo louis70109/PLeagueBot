@@ -231,39 +231,100 @@ class TestClient(unittest.TestCase):
     def test_help_flex(self):
         result = help_flex()
         expected = {
-            'type': 'carousel', 'contents': [{
-                'type': 'bubble',
-                'body': {'type': 'box', 'layout': 'vertical',
-                         'contents': [{'type': 'button',
-                                       'action': {
-                                           'type': 'message',
-                                           'label': '最新影片',
-                                           'text': '最新影片'}},
-                                      {'type': 'button',
-                                       'action': {
-                                           'type': 'message',
-                                           'label': '歷史例行賽賽程',
-                                           'text': '歷史例行賽賽程'}},
-                                      {'type': 'button',
-                                       'action': {
-                                           'type': 'message',
-                                           'label': '例行賽剩餘賽程',
-                                           'text': '例行賽剩餘賽程'}},
-                                      {'type': 'button',
-                                       'action': {
-                                           'type': 'message',
-                                           'label': '球員數據排行榜',
-                                           'text': '球員數據排行榜'}},
-                                      {'type': 'button',
-                                       'action': {
-                                           'type': 'message',
-                                           'label': '新聞',
-                                           'text': '最新新聞'}},
-                                      {'type': 'button',
-                                       'action': {
-                                           'type': 'message',
-                                           'label': '購物商城',
-                                           'text': '商品'}}]}}]}
+            "type": "carousel",
+            "contents": [
+                {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "🎬 最新影片",
+                                    "text": "最新影片"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "📖 歷史例行賽賽程",
+                                    "text": "歷史例行賽賽程"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "🔥 例行賽剩餘賽程",
+                                    "text": "例行賽剩餘賽程"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "球員數據排行榜",
+                                    "text": "球員數據排行榜"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "新聞",
+                                    "text": "最新新聞"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "🛒購物商城",
+                                    "text": "商品"
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "type": "bubble",
+                    "body": {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "📖 歷史季後賽賽程",
+                                    "text": "歷史季後賽賽程"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "🔥 當前季後賽賽程",
+                                    "text": "當前季後賽賽程"
+                                }
+                            },
+                            {
+                                "type": "button",
+                                "action": {
+                                    "type": "message",
+                                    "label": "🏆總冠軍賽",
+                                    "text": "final"
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
 
         self.assertEqual(result, expected)
         self.assertEqual(dict, type(expected))
@@ -282,7 +343,7 @@ class TestClient(unittest.TestCase):
         ]
 
         result = rank_flex()
-        f = open(os.path.abspath(os.path.dirname(__file__))+'/rank_flex.json')
+        f = open(os.path.abspath(os.path.dirname(__file__)) + '/rank_flex.json')
         expected = json.load(f)
         f.close()
 
