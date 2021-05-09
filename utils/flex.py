@@ -1,7 +1,7 @@
 import os
 
 from linebot.models import FlexSendMessage
-from sqlalchemy import text
+from sqlalchemy import text, or_
 
 from models.game import Game
 from models.news import News
@@ -242,8 +242,9 @@ def playoffs_last_games_flex() -> list:
 
 def playoffs_next_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(Game.score == '0：0', Game.season == 'playoffs'). \
-        order_by(text("id asc")).limit(12).all()
+    rows: list[Game] = Game.query.filter(Game.score != '0：0') \
+        .filter(or_(Game.season == 'playoffs', Game.season == 'finals')) \
+        .order_by(text("id asc")).limit(12).all()
     for row in rows:
         content.append(
             game_flex_template(
