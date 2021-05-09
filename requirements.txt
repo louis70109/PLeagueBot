@@ -9,4 +9,3 @@ psycopg2-binary
 beautifulsoup4
 requests
 flask_sqlalchemy
-Flask-Migrate
