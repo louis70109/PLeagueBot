@@ -214,7 +214,8 @@ def insert_or_update_to_game(games: list):
                 score      = '{game['score']}',
                 place      = '{game['place']}',
                 people     = '{game['people']}',
-                event_date = '{game['event_date']}'
+                event_date = '{game['event_date']}',
+                season     = '{game['season']}'
             ''')
         conn.commit()
 
