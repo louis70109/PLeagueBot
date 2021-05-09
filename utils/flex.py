@@ -242,7 +242,7 @@ def playoffs_last_games_flex() -> list:
 
 def playoffs_next_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(Game.score != '0：0') \
+    rows: list[Game] = Game.query.filter(Game.score == '0：0') \
         .filter(or_(Game.season == 'playoffs', Game.season == 'finals')) \
         .order_by(text("id asc")).limit(12).all()
     for row in rows:
