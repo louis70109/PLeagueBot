@@ -7,3 +7,16 @@ services:
       - '5000:5000'
     volumes:
       - .:/code
+  ngrok:
+    image: wernight/ngrok
+    ports:
+      - "4040:4040"
+    command:
+      - /bin/sh
+      - -c
+      - |
+        ngrok http -region=ap --host-header=rewrute web:5000
+    volumes:
+      - .:/home/ngrok/.ngrok2/
+    depends_on:
+      - web
