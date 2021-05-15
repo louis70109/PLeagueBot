@@ -47,10 +47,10 @@ DATABASE_URL=postgres://USER:PASSWORD@127.0.0.1:5432/postgres
 2. first terminal window
 
 ```
-cp .env.example .env
+cp .env.example .env # Modify variables value
 
 # By docker (choose one)
-docker-compose up
+docker-compose up # and go to DOCKER_IP:4040
 
 # By localized (choose one)
 pip install -r requirements.txt --user

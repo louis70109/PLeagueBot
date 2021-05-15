@@ -1,5 +1,6 @@
 version: '3.7'
-
+networks:
+  default:
 services:
   web:
     build: .
@@ -7,16 +8,18 @@ services:
       - '5000:5000'
     volumes:
       - .:/code
+    networks:
+      - default
+
   ngrok:
-    image: wernight/ngrok
+    image: wernight/ngrok:latest
     ports:
-      - "4040:4040"
-    command:
-      - /bin/sh
-      - -c
-      - |
-        ngrok http -region=ap --host-header=rewrute web:5000
-    volumes:
-      - .:/home/ngrok/.ngrok2/
+      - 4040:4040
+    environment:
+      NGROK_PROTOCOL: http
+      NGROK_PORT: web:5000
+      #NGROK_AUTH: ${NGROK_AUTH}
     depends_on:
       - web
+    networks:
+      - default
