@@ -2,8 +2,6 @@ import os
 from typing import List, Optional
 
 from fastapi import APIRouter, Header
-from flask import request
-from flask_restful import Resource, abort
 from linebot import (
     LineBotApi, WebhookHandler
 )

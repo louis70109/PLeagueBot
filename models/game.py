@@ -1,24 +1,27 @@
-from sqlalchemy import Sequence
+from tokenize import String
 
-from models.database import db
+from sqlalchemy import Sequence, Column, Integer
+
+from models.database import Base
 
 game_seq = Sequence('game_id_seq')
 
 
-class Game(db.Model):
-    __tablename__ = 'game'
-    id = db.Column(db.Integer, game_seq, primary_key=True, server_default=game_seq.next_value())
-    customer = db.Column(db.String(50), nullable=False)
-    customer_image = db.Column(db.String(200))
-    main = db.Column(db.String(50), nullable=False)
-    main_image = db.Column(db.String(200))
-    score = db.Column(db.String(10))
-    people = db.Column(db.String(15))
-    place = db.Column(db.String(20))
-    event_date = db.Column(db.String(30))
-    season = db.Column(db.String(20))
-    __table_args__ = (
-        db.UniqueConstraint('customer', 'main', 'place', 'event_date', name='game_unique'),)
+class Game(Base):
+    __tablename__ = 'games'
+
+    id = Column('id',Integer, game_seq, primary_key=True, server_default=game_seq.next_value())
+    customer = Column(String, nullable=False)
+    customer_image = Column(String)
+    main = Column(String, nullable=False)
+    main_image = Column(String)
+    score = Column(String)
+    people = Column(String)
+    place = Column(String)
+    event_date = Column(String)
+    season = Column(String)
+    # __table_args__ = (
+    #     UniqueConstraint('customer', 'main', 'place', 'event_date', name='game_unique'),)
 
     def __repr__(self):
         return f"<Game (id={self.id}, guest={self.customer}, " \

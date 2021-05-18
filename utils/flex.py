@@ -2,7 +2,10 @@ import os
 
 from linebot.models import FlexSendMessage
 from sqlalchemy import text, or_
+from sqlalchemy.orm import Session
 
+import models
+from api import get_db
 from models.game import Game
 from models.news import News
 from models.player_rank import PlayerRank
@@ -87,7 +90,7 @@ def stream_flex_template(id, title, image, link):
 
 def stream_flex() -> list:
     content = []
-    rows: list[Stream] = Stream.query.order_by(text("stream.id desc")).limit(12).all()
+    rows = get_db().query(Stream).order_by(text("stream.id desc")).limit(12).all()
     for row in rows:
         content.append(stream_flex_template(row.id, row.title, row.image, row.link))
     return content
@@ -187,7 +190,7 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
 
 def regular_last_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(
+    rows = get_db().query(Game).filter(
         Game.score != '0：0' and Game.season == 'regular-season'). \
         order_by(text("game.id desc")).limit(12).all()
 
@@ -206,7 +209,7 @@ def regular_last_games_flex() -> list:
 
 def regular_next_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter_by(score='0：0', season='regular-season'). \
+    rows = Game.query.filter_by(score='0：0', season='regular-season'). \
         order_by(text("id asc")).limit(12).all()
     for row in rows:
         content.append(
@@ -223,7 +226,7 @@ def regular_next_games_flex() -> list:
 
 def playoffs_last_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(
+    rows = get_db().query(Game).filter(
         Game.score != '0：0', Game.season == 'playoffs'). \
         order_by(text("game.id desc")).limit(12).all()
 
@@ -242,7 +245,7 @@ def playoffs_last_games_flex() -> list:
 
 def playoffs_next_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(Game.score == '0：0') \
+    rows = get_db().query(Game).filter(Game.score == '0：0') \
         .filter(or_(Game.season == 'playoffs', Game.season == 'finals')) \
         .order_by(text("id asc")).limit(12).all()
     for row in rows:
@@ -260,7 +263,7 @@ def playoffs_next_games_flex() -> list:
 
 def final_games_flex() -> list:
     content: list = []
-    rows: list[Game] = Game.query.filter(Game.season == 'finals'). \
+    rows = get_db().query(Game).filter(Game.season == 'finals'). \
         order_by(text("id asc")).limit(12).all()
     for row in rows:
         content.append(
@@ -483,12 +486,12 @@ def mapping_rank_name(rows):
 
 
 def rank_flex():
-    rows = PlayerRank.query.all()
+    rows = get_db().query(PlayerRank).all()
     return mapping_rank_name(rows)
 
 
 def news_flex():
-    rows = News.query.order_by(text("date desc")).limit(12).all()
+    rows = get_db().query(News).order_by(text("date desc")).limit(12).all()
     content = []
     for row in rows:
         content.append(news_flex_template(row))

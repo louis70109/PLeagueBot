@@ -15,7 +15,7 @@ from lotify.client import Client
 
 from fastapi.middleware.wsgi import WSGIMiddleware
 
-from models.database import db
+from models.database import db, engine, Base, SessionLocal
 
 from controller import line_controller
 from controller.liff_controller import liff_share_controller
@@ -27,6 +27,14 @@ app.include_router(line_controller.router)
 
 flask_app = Flask(__name__)
 CORS(flask_app)
+
+Base.metadata.create_all(bind=engine)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 flask_app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
