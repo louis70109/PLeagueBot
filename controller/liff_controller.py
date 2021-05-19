@@ -1,6 +1,7 @@
 import os
 from flask import request
 
+from models.database import get_db
 from models.game import Game
 from models.news import News
 from models.shop import Shop
@@ -23,7 +24,7 @@ def liff_share_controller():
     alt = '你已被標註。'
     if game:
         alt = "分享 P+ 聯盟賽程給你"
-        row = Game.query.filter_by(id=game).first()
+        row = get_db().query(Game).filter_by(id=game).first()
 
         content.append(game_flex_template(
             row.id,

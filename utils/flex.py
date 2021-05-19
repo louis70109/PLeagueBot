@@ -1,11 +1,11 @@
 import os
 
+from fastapi import Depends
 from linebot.models import FlexSendMessage
 from sqlalchemy import text, or_
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, scoped_session
 
-import models
-from api import get_db
+from models.database import get_db
 from models.game import Game
 from models.news import News
 from models.player_rank import PlayerRank
@@ -188,11 +188,15 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
     }
 
 
-def regular_last_games_flex() -> list:
+def regular_last_games_flex(db: scoped_session = get_db()) -> list:
     content: list = []
-    rows = get_db().query(Game).filter(
+    print("!!!!!!!!!!!!!!!")
+    rows = db.query(Game).filter(
         Game.score != '0：0' and Game.season == 'regular-season'). \
         order_by(text("game.id desc")).limit(12).all()
+    print("@@@@@@@@@@@@@@")
+    print(rows)
+    print("@@@@@@@@@@@@@@")
 
     for row in rows:
         content.append(

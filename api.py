@@ -28,19 +28,13 @@ app.include_router(line_controller.router)
 flask_app = Flask(__name__)
 CORS(flask_app)
 
-Base.metadata.create_all(bind=engine)
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
-flask_app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
-flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db.init_app(flask_app)
-with flask_app.app_context():
-    db.create_all()
+
+# flask_app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+# flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db.init_app(flask_app)
+# with flask_app.app_context():
+#     db.create_all()
 
 # api = Api(flask_app)
 

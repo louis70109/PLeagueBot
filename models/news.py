@@ -1,11 +1,11 @@
 from sqlalchemy import Sequence
 
-from models.database import db
+from models.database import db, Base
 
 shop_seq = Sequence('stream_id_seq')
 
 
-class News(db.Model):
+class News(Base):
     __tablename__ = 'news'
     id = db.Column(db.Integer, shop_seq, primary_key=True, server_default=shop_seq.next_value())
     link = db.Column(db.String(255))
