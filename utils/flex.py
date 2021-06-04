@@ -188,7 +188,7 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
     }
 
 
-def regular_last_games_flex(db: scoped_session = get_db()) -> list:
+def regular_last_games_flex(db: Session = Depends(get_db)) -> list:
     content: list = []
     print("!!!!!!!!!!!!!!!")
     rows = db.query(Game).filter(

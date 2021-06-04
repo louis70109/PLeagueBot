@@ -1,18 +1,19 @@
-from sqlalchemy import Sequence
+from models.database import Base
+from sqlalchemy import Sequence, Column, UniqueConstraint, Integer, String
 
-from models.database import db
+
 
 shop_seq = Sequence('stream_id_seq')
 
 
-class Shop(db.Model):
+class Shop(Base):
     __tablename__ = 'shop'
-    id = db.Column(db.Integer, shop_seq, primary_key=True, server_default=shop_seq.next_value())
-    link = db.Column(db.String(255))
-    image = db.Column(db.String(255))
-    product = db.Column(db.String(255))
-    price = db.Column(db.String(12))
-    __table_args__ = (db.UniqueConstraint('product', name='product_unique'),)
+    id = Column(Integer, shop_seq, primary_key=True, server_default=shop_seq.next_value())
+    link = Column(String(255))
+    image = Column(String(255))
+    product = Column(String(255))
+    price = Column(String(12))
+    __table_args__ = (UniqueConstraint('product', name='product_unique'),)
 
     def __repr__(self):
         return f"<Stream (id={self.id}, link={self.link}, " \

@@ -1,17 +1,17 @@
-from sqlalchemy import Sequence
-from models.database import db
+from models.database import Base
+from sqlalchemy import Sequence, Column, Integer, String
 
 player_rank_seq = Sequence('player_rank_id_seq')
 
 
-class PlayerRank(db.Model):
+class PlayerRank(Base):
     __tablename__ = 'player_rank'
-    id = db.Column(db.Integer, player_rank_seq, primary_key=True,
+    id = Column(Integer, player_rank_seq, primary_key=True,
                    server_default=player_rank_seq.next_value())
-    player = db.Column(db.String(10))
-    team = db.Column(db.String(10))
-    average = db.Column(db.String(10))
-    rank_name = db.Column(db.String(10))
+    player = Column(String(10))
+    team = Column(String(10))
+    average = Column(String(10))
+    rank_name = Column(String(10))
 
     def __repr__(self):
         return f"<PlayerRank (id={self.id}, " \
