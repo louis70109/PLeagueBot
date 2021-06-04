@@ -16,7 +16,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
-.vscode/
 .idea/*
 .DS_Store
 .tox/
