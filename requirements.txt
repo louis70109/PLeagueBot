@@ -11,3 +11,4 @@ requests
 flask_sqlalchemy
 fastapi>=0.65
 uvicorn
+databases[postgresql]

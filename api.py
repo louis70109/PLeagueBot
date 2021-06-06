@@ -24,26 +24,30 @@ from controller.liff_controller import liff_share_controller
 
 app = FastAPI()
 
-app.include_router(line_controller.router)
 
 
 flask_app = Flask(__name__)
 CORS(flask_app)
 
+import models.database as db
+
 @app.on_event("startup")
-async def startup() -> None:
+async def startup():
     SQLALCHEMY_DATABASE_URL = os.getenv('DATABASE_URI')
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
     Base.metadata.create_all(bind=engine)
+    await db.database.connect()
 
 
 @app.on_event("shutdown")
 async def shutdown():
-    SessionLocal().close()
+    await db.database.disconnect()
+
 
 # api = Api(flask_app)
 
 # api.add_resource(LineController, '/webhooks/line')
+app.include_router(line_controller.router)
 
 
 @flask_app.errorhandler(500)
@@ -56,7 +60,9 @@ def internal_error(e):
     return "500"
 
 
-@flask_app.route("/health", methods=['GET'])
+
+
+@flask_app.route("/", methods=['GET'])
 def health_check():
     return 'ok'
 

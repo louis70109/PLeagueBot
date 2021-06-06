@@ -1,11 +1,10 @@
 import os
 
-from fastapi import Depends
 from linebot.models import FlexSendMessage
 from sqlalchemy import text, or_
-from sqlalchemy.orm import Session, scoped_session
+from sqlalchemy.orm import Session
 
-from models.database import get_db
+from models.database import SessionLocal
 from models.game import Game
 from models.news import News
 from models.player_rank import PlayerRank
@@ -14,7 +13,7 @@ from models.stream import Stream
 
 SHARE_ID = os.getenv('LIFF_SHARE_ID')
 SHARE_LINK = f"https://liff.line.me/{SHARE_ID}"
-
+session: Session = SessionLocal()
 
 def flex_message_type_condition(alt: str, contents: list or dict, **kwargs):
     if type(contents) == list:
@@ -90,7 +89,7 @@ def stream_flex_template(id, title, image, link):
 
 def stream_flex() -> list:
     content = []
-    rows = get_db().query(Stream).order_by(text("stream.id desc")).limit(12).all()
+    rows = session.query(Stream).order_by(text("stream.id desc")).limit(12).all()
     for row in rows:
         content.append(stream_flex_template(row.id, row.title, row.image, row.link))
     return content
@@ -188,15 +187,11 @@ def game_flex_template(id, guest_image, main_image, score, people, location, dat
     }
 
 
-def regular_last_games_flex(db: Session = Depends(get_db)) -> list:
+def regular_last_games_flex() -> list:
     content: list = []
-    print("!!!!!!!!!!!!!!!")
-    rows = db.query(Game).filter(
+    rows = session.query(Game).filter(
         Game.score != '0：0' and Game.season == 'regular-season'). \
         order_by(text("game.id desc")).limit(12).all()
-    print("@@@@@@@@@@@@@@")
-    print(rows)
-    print("@@@@@@@@@@@@@@")
 
     for row in rows:
         content.append(
@@ -213,8 +208,9 @@ def regular_last_games_flex(db: Session = Depends(get_db)) -> list:
 
 def regular_next_games_flex() -> list:
     content: list = []
-    rows = Game.query.filter_by(score='0：0', season='regular-season'). \
+    rows = session.query(Game).filter_by(score='0：0', season='regular-season'). \
         order_by(text("id asc")).limit(12).all()
+
     for row in rows:
         content.append(
             game_flex_template(
@@ -230,7 +226,7 @@ def regular_next_games_flex() -> list:
 
 def playoffs_last_games_flex() -> list:
     content: list = []
-    rows = get_db().query(Game).filter(
+    rows = session.query(Game).filter(
         Game.score != '0：0', Game.season == 'playoffs'). \
         order_by(text("game.id desc")).limit(12).all()
 
@@ -249,7 +245,7 @@ def playoffs_last_games_flex() -> list:
 
 def playoffs_next_games_flex() -> list:
     content: list = []
-    rows = get_db().query(Game).filter(Game.score == '0：0') \
+    rows = session.query(Game).filter(Game.score == '0：0') \
         .filter(or_(Game.season == 'playoffs', Game.season == 'finals')) \
         .order_by(text("id asc")).limit(12).all()
     for row in rows:
@@ -267,7 +263,7 @@ def playoffs_next_games_flex() -> list:
 
 def final_games_flex() -> list:
     content: list = []
-    rows = get_db().query(Game).filter(Game.season == 'finals'). \
+    rows = session.query(Game).filter(Game.season == 'finals'). \
         order_by(text("id asc")).limit(12).all()
     for row in rows:
         content.append(
@@ -432,7 +428,7 @@ def player_rank_flex_template(rows):
                 "type": "text",
                 "text": "排行榜",
                 "weight": "bold",
-                "color": "#1DB446",
+                "color": "#1session446",
                 "size": "sm"
             }, {
                 "type": "text",
@@ -490,12 +486,12 @@ def mapping_rank_name(rows):
 
 
 def rank_flex():
-    rows = get_db().query(PlayerRank).all()
+    rows = session.query(PlayerRank).all()
     return mapping_rank_name(rows)
 
 
 def news_flex():
-    rows = get_db().query(News).order_by(text("date desc")).limit(12).all()
+    rows = session.query(News).order_by(text("date desc")).limit(12).all()
     content = []
     for row in rows:
         content.append(news_flex_template(row))
@@ -634,7 +630,7 @@ def news_flex_template(news):
 
 
 def shop_flex() -> list:
-    rows = Shop.query.limit(12).all()
+    rows = session.query(Shop).limit(12).all()
     content = []
     for row in rows:
         content.append(shop_flex_template(row))

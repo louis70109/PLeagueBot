@@ -1,18 +1,11 @@
 import os
-
+from databases import Database
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-
-engine = create_engine(os.getenv('DATABASE_URI'))
+URI = os.getenv('DATABASE_URI')
+engine = create_engine(URI)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
+database = Database(URI)
 Base = declarative_base()
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()

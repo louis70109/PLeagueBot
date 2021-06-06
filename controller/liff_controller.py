@@ -1,7 +1,8 @@
 import os
 from flask import request
+from sqlalchemy.orm.session import Session
 
-from models.database import get_db
+from models.database import SessionLocal
 from models.game import Game
 from models.news import News
 from models.shop import Shop
@@ -11,6 +12,7 @@ from utils.flex import game_flex_template, stream_flex_template, news_flex_templ
     shop_flex_template, add_me
 
 LIFF_ID = os.getenv('LIFF_SHARE_ID')
+session: Session = SessionLocal()
 
 
 def liff_share_controller():
@@ -24,7 +26,7 @@ def liff_share_controller():
     alt = '你已被標註。'
     if game:
         alt = "分享 P+ 聯盟賽程給你"
-        row = get_db().query(Game).filter_by(id=game).first()
+        row = session.query(Game).filter_by(id=game).first()
 
         content.append(game_flex_template(
             row.id,
@@ -37,15 +39,15 @@ def liff_share_controller():
         )
     elif stream:
         alt = "分享一個 P+ 影片給你"
-        row = Stream.query.filter_by(id=stream).first()
+        row = session.query(Stream).filter_by(id=stream).first()
         content.append(stream_flex_template(row.id, row.title, row.image, row.link))
     elif news:
         alt = "我找到一篇 P+ 的新聞啦！！"
-        row = News.query.filter_by(id=news).first()
+        row = session.query(News).filter_by(id=news).first()
         content.append(news_flex_template(row))
     elif shop:
         alt = "分享個 P+ 商品給你～"
-        row = Shop.query.filter_by(id=shop).first()
+        row = session.query(Shop).filter_by(id=shop).first()
         content.append(shop_flex_template(row))
     else:
         content = [add_me()]
