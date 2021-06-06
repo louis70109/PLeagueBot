@@ -1,35 +1,26 @@
-from models.database import Base, SessionLocal
 import os
-
 
 if os.getenv('FLASK_ENV') != 'production':
     from dotenv import load_dotenv
 
     load_dotenv()
 
-import traceback
 import uvicorn
 from fastapi import FastAPI
-from flask import Flask, request, Response, render_template
+from flask import Flask, Response, render_template
 from flask_cors import CORS
-from lotify.client import Client
-
 from fastapi.middleware.wsgi import WSGIMiddleware
-
-# from models.database import db
 from sqlalchemy import create_engine
+from models.database import Base
+import models.database as db
 
 from controller import line_controller
 from controller.liff_controller import liff_share_controller
 
 app = FastAPI()
 
-
-
 flask_app = Flask(__name__)
 CORS(flask_app)
-
-import models.database as db
 
 @app.on_event("startup")
 async def startup():
@@ -38,34 +29,15 @@ async def startup():
     Base.metadata.create_all(bind=engine)
     await db.database.connect()
 
-
 @app.on_event("shutdown")
 async def shutdown():
     await db.database.disconnect()
 
-
-# api = Api(flask_app)
-
-# api.add_resource(LineController, '/webhooks/line')
 app.include_router(line_controller.router)
 
-
-@flask_app.errorhandler(500)
-def internal_error(e):
-    error_trace = str(traceback.format_exc())[-300:]
-    msg = 'P+ bot: url: ' + str(request.url) + \
-          " inbound: " + str(request.remote_addr) + " log: " + error_trace
-    lotify = Client()
-    lotify.send_message(access_token=os.getenv('LINE_NOTIFY_TOKEN'), message=msg)
-    return "500"
-
-
-
-
-@flask_app.route("/", methods=['GET'])
+@app.get("/")
 def health_check():
     return 'ok'
-
 
 @flask_app.route("/liff/share", methods=['GET'])
 def liff_page():
@@ -75,7 +47,6 @@ def liff_page():
         return Response(render_template('share_message.html', flex=flex, liff_id=liff_id))
     else:
         return Response(render_template('liff_redirect.html', liff_id=liff_id))
-
 
 
 app.mount("/", WSGIMiddleware(flask_app))
