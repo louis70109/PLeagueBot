@@ -1,14 +1,10 @@
 flask==1.0.2
-flask-restful==0.3.7
 flask_cors
 line-bot-sdk
-python-dotenv
 lotify
-gunicorn
 psycopg2-binary
 beautifulsoup4
 requests
-flask_sqlalchemy
 fastapi>=0.65
 uvicorn
 databases[postgresql]
