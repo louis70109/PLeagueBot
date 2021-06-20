@@ -75,26 +75,26 @@ class TestClient(unittest.TestCase):
     #     self.compare_object_json(result, expected_query_string)
 
     # def test_stream_flex_template(self):
-        result = stream_flex_template(id="1", title='TITLE', image='IMAGE_URL', link='JUST_LINK')
-        expected_query_string = {
-            'type': 'bubble',
-            'hero': {'type': 'image', 'url': 'IMAGE_URL', 'size': 'full',
-                     'aspectRatio': '20:13',
-                     'aspectMode': 'cover',
-                     'action': {'type': 'uri', 'uri': 'JUST_LINK'}},
-            'body': {'type': 'box', 'layout': 'vertical', 'contents': [
-                {'type': 'text', 'text': 'TITLE', 'weight': 'bold',
-                 'size': 'lg', 'wrap': True}]},
-            'footer': {'type': 'box', 'layout': 'horizontal', 'spacing': 'sm',
-                       'contents': [
-                           {'type': 'button', 'style': 'link', 'height': 'sm',
-                            'action': {'type': 'uri', 'label': '影片連結',
-                                       'uri': 'JUST_LINK'}},
-                           {'type': 'button', 'style': 'link', 'height': 'sm',
-                            'action': {'type': 'uri', 'label': '分享',
-                                       'uri': 'https://liff.line.me/TEST_ID/?stream=1'}}],
-                       'flex': 0}}
-        self.assertEqual(result, expected_query_string)
+        # result = stream_flex_template(id="1", title='TITLE', image='IMAGE_URL', link='JUST_LINK')
+        # expected_query_string = {
+        #     'type': 'bubble',
+        #     'hero': {'type': 'image', 'url': 'IMAGE_URL', 'size': 'full',
+        #              'aspectRatio': '20:13',
+        #              'aspectMode': 'cover',
+        #              'action': {'type': 'uri', 'uri': 'JUST_LINK'}},
+        #     'body': {'type': 'box', 'layout': 'vertical', 'contents': [
+        #         {'type': 'text', 'text': 'TITLE', 'weight': 'bold',
+        #          'size': 'lg', 'wrap': True}]},
+        #     'footer': {'type': 'box', 'layout': 'horizontal', 'spacing': 'sm',
+        #                'contents': [
+        #                    {'type': 'button', 'style': 'link', 'height': 'sm',
+        #                     'action': {'type': 'uri', 'label': '影片連結',
+        #                                'uri': 'JUST_LINK'}},
+        #                    {'type': 'button', 'style': 'link', 'height': 'sm',
+        #                     'action': {'type': 'uri', 'label': '分享',
+        #                                'uri': 'https://liff.line.me/TEST_ID/?stream=1'}}],
+        #                'flex': 0}}
+        # self.assertEqual(result, expected_query_string)
 
     # @patch('utils.flex.SessionLocal')
     # def test_stream_flex(self, mock_session):
@@ -226,105 +226,105 @@ class TestClient(unittest.TestCase):
     #     self.assertEqual(list, type(expected))
 
     # def test_help_flex(self):
-        result = help_flex()
-        expected = {
-            "type": "carousel",
-            "contents": [
-                {
-                    "type": "bubble",
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "🎬 最新影片",
-                                    "text": "最新影片"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "📖 歷史例行賽賽程",
-                                    "text": "歷史例行賽賽程"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "🔥 例行賽剩餘賽程",
-                                    "text": "例行賽剩餘賽程"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "球員數據排行榜",
-                                    "text": "球員數據排行榜"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "新聞",
-                                    "text": "最新新聞"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "🛒購物商城",
-                                    "text": "商品"
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "bubble",
-                    "body": {
-                        "type": "box",
-                        "layout": "vertical",
-                        "contents": [
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "📖 歷史季後賽賽程",
-                                    "text": "歷史季後賽賽程"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "🔥 當前季後賽賽程",
-                                    "text": "當前季後賽賽程"
-                                }
-                            },
-                            {
-                                "type": "button",
-                                "action": {
-                                    "type": "message",
-                                    "label": "🏆總冠軍賽",
-                                    "text": "final"
-                                }
-                            }
-                        ]
-                    }
-                }
-            ]
-        }
+        # result = help_flex()
+        # expected = {
+        #     "type": "carousel",
+        #     "contents": [
+        #         {
+        #             "type": "bubble",
+        #             "body": {
+        #                 "type": "box",
+        #                 "layout": "vertical",
+        #                 "contents": [
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "🎬 最新影片",
+        #                             "text": "最新影片"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "📖 歷史例行賽賽程",
+        #                             "text": "歷史例行賽賽程"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "🔥 例行賽剩餘賽程",
+        #                             "text": "例行賽剩餘賽程"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "球員數據排行榜",
+        #                             "text": "球員數據排行榜"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "新聞",
+        #                             "text": "最新新聞"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "🛒購物商城",
+        #                             "text": "商品"
+        #                         }
+        #                     }
+        #                 ]
+        #             }
+        #         },
+        #         {
+        #             "type": "bubble",
+        #             "body": {
+        #                 "type": "box",
+        #                 "layout": "vertical",
+        #                 "contents": [
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "📖 歷史季後賽賽程",
+        #                             "text": "歷史季後賽賽程"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "🔥 當前季後賽賽程",
+        #                             "text": "當前季後賽賽程"
+        #                         }
+        #                     },
+        #                     {
+        #                         "type": "button",
+        #                         "action": {
+        #                             "type": "message",
+        #                             "label": "🏆總冠軍賽",
+        #                             "text": "final"
+        #                         }
+        #                     }
+        #                 ]
+        #             }
+        #         }
+        #     ]
+        # }
 
-        self.assertEqual(result, expected)
-        self.assertEqual(dict, type(expected))
+        # self.assertEqual(result, expected)
+        # self.assertEqual(dict, type(expected))
 
     # def test_rank_flex(self):
     #     mock_query.query.return_value.all.return_value = [
