@@ -110,21 +110,21 @@ def ranking_list(soup):
         data_list = dt.find(
             class_='text-md-left text-center fs14 text_strong pl-md-3 pl-0').get_text()
         ranking = player_ranking(dt)
-        if re.search('(\s+)?得分(\s+)?', data_list):
+        if re.search(r'(\s+)?得分(\s+)?', data_list):
             rank['scores'] = ranking
-        elif re.search('(\s+)?籃板(\s+)?', data_list):
+        elif re.search(r'(\s+)?籃板(\s+)?', data_list):
             rank['rebounds'] = ranking
-        elif re.search('(\s+)?助攻(\s+)?', data_list):
+        elif re.search(r'(\s+)?助攻(\s+)?', data_list):
             rank['assists'] = ranking
-        elif re.search('(\s+)?抄截(\s+)?', data_list):
+        elif re.search(r'(\s+)?抄截(\s+)?', data_list):
             rank['steals'] = ranking
-        elif re.search('(\s+)?阻攻(\s+)?', data_list):
+        elif re.search(r'(\s+)?阻攻(\s+)?', data_list):
             rank['blocks'] = ranking
-        elif re.search('(\s+)?二分球(\s+)?', data_list):
+        elif re.search(r'(\s+)?二分球(\s+)?', data_list):
             rank['two'] = ranking
-        elif re.search('(\s+)?三分球(\s+)?', data_list):
+        elif re.search(r'(\s+)?三分球(\s+)?', data_list):
             rank['three'] = ranking
-        elif re.search('(\s+)?罰球(\s+)?', data_list):
+        elif re.search(r'(\s+)?罰球(\s+)?', data_list):
             rank['freethrow'] = ranking
     return rank
 
