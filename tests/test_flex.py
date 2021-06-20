@@ -1,15 +1,9 @@
 import json
-import os
+# import os
 import unittest
 from _pytest.monkeypatch import MonkeyPatch
-from mock import patch
 
-from schemas.game import Game
-from schemas.player_rank import PlayerRank
-from models.stream import Stream
-from utils.flex import flex_message_type_condition, stream_flex_template, stream_flex, \
-    game_flex_template, regular_last_games_flex, regular_next_games_flex, help_flex, rank_flex
-
+from utils.flex import flex_message_type_condition, stream_flex_template, help_flex
 
 class TestClient(unittest.TestCase):
     def setUp(self):
