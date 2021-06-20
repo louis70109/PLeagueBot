@@ -22,6 +22,7 @@ app = FastAPI()
 flask_app = Flask(__name__)
 CORS(flask_app)
 
+
 @app.on_event("startup")
 async def startup():
     SQLALCHEMY_DATABASE_URL = os.getenv('DATABASE_URI')
@@ -29,15 +30,19 @@ async def startup():
     Base.metadata.create_all(bind=engine)
     await db.database.connect()
 
+
 @app.on_event("shutdown")
 async def shutdown():
     await db.database.disconnect()
 
+
 app.include_router(line_controller.router)
+
 
 @app.get("/")
 def health_check():
     return 'ok'
+
 
 @flask_app.route("/liff/share", methods=['GET'])
 def liff_page():

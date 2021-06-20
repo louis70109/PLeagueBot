@@ -9,7 +9,6 @@ from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, \
     QuickReply, QuickReplyButton, MessageAction, URIAction
 from pydantic.main import BaseModel
-from sqlalchemy.orm.session import Session
 from starlette.exceptions import HTTPException
 from starlette.requests import Request
 
@@ -32,6 +31,7 @@ router = APIRouter(
 class Line(BaseModel):
     destination: str
     events: List[Optional[None]]
+
 
 @router.post("/line")
 async def callback(request: Request, x_line_signature: str = Header(None)):

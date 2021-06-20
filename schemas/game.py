@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-class GameBase(BaseModel):
 
+class GameBase(BaseModel):
     id: int
     customer: str
     customer_image: str
@@ -12,6 +12,7 @@ class GameBase(BaseModel):
     place: str
     event_date: str
     season: str
+
 
 class Game(GameBase):
     class Config:

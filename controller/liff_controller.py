@@ -57,4 +57,3 @@ def liff_share_controller():
         "contents": content
     }}}
     return msg, LIFF_ID
-
