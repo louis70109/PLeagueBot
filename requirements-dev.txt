@@ -6,3 +6,4 @@ pytest-pep8
 pytest-cov
 tox
 mock
+python-dotenv

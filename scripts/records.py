@@ -110,30 +110,33 @@ def ranking_list(soup):
         data_list = dt.find(
             class_='text-md-left text-center fs14 text_strong pl-md-3 pl-0').get_text()
         ranking = player_ranking(dt)
-        if re.search('(\s+)?得分(\s+)?', data_list):
+        if re.search(r'(\s+)?得分(\s+)?', data_list):
             rank['scores'] = ranking
-        elif re.search('(\s+)?籃板(\s+)?', data_list):
+        elif re.search(r'(\s+)?籃板(\s+)?', data_list):
             rank['rebounds'] = ranking
-        elif re.search('(\s+)?助攻(\s+)?', data_list):
+        elif re.search(r'(\s+)?助攻(\s+)?', data_list):
             rank['assists'] = ranking
-        elif re.search('(\s+)?抄截(\s+)?', data_list):
+        elif re.search(r'(\s+)?抄截(\s+)?', data_list):
             rank['steals'] = ranking
-        elif re.search('(\s+)?阻攻(\s+)?', data_list):
+        elif re.search(r'(\s+)?阻攻(\s+)?', data_list):
             rank['blocks'] = ranking
-        elif re.search('(\s+)?二分球(\s+)?', data_list):
+        elif re.search(r'(\s+)?二分球(\s+)?', data_list):
             rank['two'] = ranking
-        elif re.search('(\s+)?三分球(\s+)?', data_list):
+        elif re.search(r'(\s+)?三分球(\s+)?', data_list):
             rank['three'] = ranking
-        elif re.search('(\s+)?罰球(\s+)?', data_list):
+        elif re.search(r'(\s+)?罰球(\s+)?', data_list):
             rank['freethrow'] = ranking
     return rank
 
 
 def game_record_list(soup):
     teams, games, games_win, games_lose, games_records = [], [], [], [], []
-    for dt in soup.find_all(class_='bg-deepgray text-light'):
-        teams.append(dt.find('a', class_='fs14').get_text())
-    for dt in soup.find_all(class_='bg-deepgray text-light'):
+    for dt in soup.find_all('tr', class_='bg-deepgray text-light'):
+        print("!!!!!!!!!!!!!!!!!!!!!")
+        # print(dt)
+        print(dt.find('a', class_='fs14').get('img'))
+        # teams.append(dt.find('a', class_='fs14').get_text())
+    for dt in soup.find_all(class_='table table-hover table-dark team_ranking mb-0'):
         tmp_records = []
         records_list = dt.find_all('td', class_='')
         records_length = len(records_list)
@@ -197,15 +200,16 @@ def full_ranking():
     print("Check DB status")
     db_table_check()
     print("Check DB Done")
-    res = requests.get('https://pleagueofficial.com/stat_ranking', headers={
+    res = requests.get('https://pleagueofficial.com/stat-ranking', headers={
         'User-Agent': 'Firefox browser\'s user-agent',
     })
     soup = BeautifulSoup(res.content, 'html.parser')
     time.sleep(1)
-    print('Load games ranking...')
-    games_rank = game_record_list(soup=soup)
-    print('Start to insert data.')
-    insert_to_player_team_rank(games_rank)
+    # 目前尚未有隊伍排名
+    # print('Load games ranking...')
+    # games_rank = game_record_list(soup=soup)
+    # print('Start to insert data.')
+    # insert_to_player_team_rank(games_rank)
     print('Insert games ranking records done.')
     time.sleep(2)
     print('Load players racords...')

@@ -1,19 +1,18 @@
-from sqlalchemy import Sequence
-
-from models.database import db
+from models.database import Base
+from sqlalchemy import Sequence, Column, Boolean, UniqueConstraint, Integer, String
 
 stream_seq = Sequence('stream_id_seq')
 
 
-class Stream(db.Model):
+class Stream(Base):
     __tablename__ = 'stream'
-    id = db.Column(db.Integer, stream_seq, primary_key=True,
+    id = Column(Integer, stream_seq, primary_key=True,
                    server_default=stream_seq.next_value())
-    link = db.Column(db.String(255))
-    image = db.Column(db.String(255))
-    title = db.Column(db.String(100))
-    is_live = db.Column(db.Boolean(), default=True)
-    __table_args__ = (db.UniqueConstraint('link', 'image', 'title', name='stream_unique'),)
+    link = Column(String(255))
+    image = Column(String(255))
+    title = Column(String(100))
+    is_live = Column(Boolean, default=True)
+    __table_args__ = (UniqueConstraint('link', 'image', 'title', name='stream_unique'),)
 
     def __repr__(self):
         return f"<Stream (id={self.id}, link={self.link}, " \
