@@ -89,4 +89,4 @@ heroku logs --tail
 
 # License
 
-MIT License
+[MIT](https://github.com/louis70109/PLeagueBot/blob/import-orm/MIT-LICENSE)
